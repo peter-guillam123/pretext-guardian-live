@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pretext Demo 5: The 500-Block Stress Test</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #F6F6F6;
+    color: #121212;
+    line-height: 1.4;
+  }
+
+  .demo-header {
+    background: #052962;
+    color: #fff;
+    padding: 24px 0;
+    border-bottom: 4px solid #FFE500;
+  }
+  .demo-header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .demo-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .demo-header p {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    opacity: 0.85;
+    max-width: 800px;
+    line-height: 1.5;
+  }
+
+  .controls-bar {
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .controls-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #333;
+  }
+  .control-group label { font-weight: 600; white-space: nowrap; }
+  .control-group input[type="range"] { width: 200px; accent-color: #052962; }
+
+  .card-count-btns { display: flex; gap: 4px; }
+  .card-count-btns button {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    padding: 4px 12px;
+    border: 1px solid #052962;
+    background: #fff;
+    color: #052962;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+  .card-count-btns button.active {
+    background: #052962;
+    color: #fff;
+  }
+
+  .metrics-dashboard {
+    display: flex;
+    gap: 24px;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .metric {
+    text-align: center;
+    min-width: 100px;
+  }
+  .metric-value {
+    font-family: 'Courier New', monospace;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .metric-label {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    margin-top: 2px;
+  }
+  .metric-dom .metric-value { color: #C70000; }
+  .metric-pretext .metric-value { color: #0a8a0a; }
+  .metric-fps .metric-value { color: #052962; }
+
+  .panels-container {
+    max-width: 1300px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .panel {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .panel-header {
+    padding: 12px 16px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .panel-dom .panel-header {
+    background: #C70000;
+    color: #fff;
+    border-top: 4px solid #900;
+  }
+  .panel-pretext .panel-header {
+    background: #0a8a0a;
+    color: #fff;
+    border-top: 4px solid #065f06;
+  }
+  .panel-header .panel-time {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--card-width, 220px), 1fr));
+    gap: 12px;
+    padding: 16px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .card {
+    border-top: 4px solid #052962;
+    padding: 10px;
+    background: #FAFAFA;
+  }
+  .card-headline {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    color: #121212;
+  }
+  .card-standfirst {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+  }
+
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 41, 98, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  .loading-overlay.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  Preparing Pretext measurements...
+</div>
+
+<header class="demo-header">
+  <div class="demo-header-inner">
+    <h1>Demo 5: The 500-Block Stress Test</h1>
+    <p>A grid of Guardian article cards. Drag the width slider to trigger a full recalculation across every card. The DOM panel reads <code>offsetHeight</code> per card (layout thrashing). The Pretext panel calls <code>layout()</code> using cached <code>prepare()</code> results -- pure arithmetic, zero reflows.</p>
+  </div>
+</header>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <div class="control-group">
+      <label>Card width:</label>
+      <input type="range" id="widthSlider" min="150" max="400" value="220">
+      <span id="widthValue">220px</span>
+    </div>
+
+    <div class="control-group">
+      <label>Cards:</label>
+      <div class="card-count-btns">
+        <button data-count="100">100</button>
+        <button data-count="250">250</button>
+        <button data-count="500" class="active">500</button>
+        <button data-count="1000">1000</button>
+      </div>
+    </div>
+
+    <div class="metrics-dashboard">
+      <div class="metric metric-dom">
+        <div class="metric-value" id="domTime">--</div>
+        <div class="metric-label">DOM time</div>
+      </div>
+      <div class="metric metric-pretext">
+        <div class="metric-value" id="pretextTime">--</div>
+        <div class="metric-label">Pretext time</div>
+      </div>
+      <div class="metric metric-fps">
+        <div class="metric-value" id="speedup">--</div>
+        <div class="metric-label">Speedup</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panels-container">
+  <div class="panel panel-dom">
+    <div class="panel-header">
+      <span>DOM offsetHeight (layout thrashing)</span>
+      <span class="panel-time" id="domPanelTime">--</span>
+    </div>
+    <div class="card-grid" id="domGrid"></div>
+  </div>
+  <div class="panel panel-pretext">
+    <div class="panel-header">
+      <span>Pretext layout() (cached prepare)</span>
+      <span class="panel-time" id="pretextPanelTime">--</span>
+    </div>
+    <div class="card-grid" id="pretextGrid"></div>
+  </div>
+</div>
+
+<script type="module">
+import { prepare, layout } from 'https://esm.sh/@chenglou/pretext@0.0.3';
+
+const HEADLINES = [
+  "Climate crisis: global temperatures hit record high for third consecutive year",
+  "UK inflation falls to lowest level since 2021 as energy prices stabilise",
+  "Premier League title race heads for dramatic final day showdown",
+  "Scientists discover high-temperature superconductor in common mineral",
+  "Inside the fight to save the Amazon's last uncontacted tribes",
+  "AI regulation bill passes first reading in parliament amid tech backlash",
+  "Housing crisis deepens as mortgage rates climb above 6% again",
+  "Gaza ceasefire talks resume as humanitarian corridor opens briefly",
+  "NHS waiting lists fall for first time in two years after reform push",
+  "Ocean plastic pollution linked to high microplastic levels in human blood",
+  "London mayor announces expanded ultra-low emission zone from April",
+  "Breakthrough gene therapy reverses inherited blindness in clinical trial",
+  "Record number of migrants cross Channel despite new Rwanda flights",
+  "Bank of England holds rates steady but signals cuts by autumn",
+  "Wildfire smoke blankets New York as Canadian fires rage unchecked",
+  "TikTok faces fresh ban threats as security concerns mount in Europe",
+  "Scotland's independence movement fractures over currency question",
+  "New study reveals high-protein diets may accelerate ageing process",
+  "Grenfell inquiry final report demands criminal prosecution of contractors",
+  "Water companies dump record sewage levels into rivers despite pledges",
+  "China launches reusable spacecraft in challenge to SpaceX dominance",
+  "Young voters desert Labour over cost of living and housing failures",
+  "Antarctic ice sheet losing mass faster than worst-case projections",
+  "Energy giants post record profits as windfall tax debate reignites",
+  "Royal Mail privatisation plan triggers postal worker strike ballot",
+];
+
+const STANDFIRSTS = [
+  "Analysis reveals 2025 was the hottest year ever recorded, with global mean temperatures breaching the 1.5C threshold for a full calendar year for the first time",
+  "Consumer prices index drops to 2.3%, prompting speculation the Bank of England could cut interest rates as soon as next month",
+  "With just two points separating the top three, the final weekend promises one of the most thrilling title deciders in Premier League history",
+  "The material, found in a volcanic mineral, conducts electricity with zero resistance at temperatures achievable by standard refrigeration units",
+  "Illegal logging and land clearance are closing in on indigenous groups who have had no contact with the outside world, threatening their survival",
+  "The bill would require companies to disclose training data sources and submit frontier models for safety testing before public release",
+  "Average two-year fixed rate surpasses 6.1%, putting home ownership further out of reach for millions of first-time buyers across England",
+  "Negotiations in Doha focus on a phased approach to hostage releases, with mediators cautiously optimistic about a framework agreement",
+  "Government credits targeted investment in diagnostic centres and surgical hubs, though critics warn the improvement remains fragile",
+  "Researchers found microplastic particles in 77% of blood samples tested, with concentrations highest among those living near coastal industrial zones",
+  "The expansion will cover all of Greater London from April, with drivers of non-compliant vehicles facing a daily charge of fifteen pounds",
+  "Twelve patients in the trial showed dramatic vision improvement within weeks, offering hope for thousands born with the rare condition",
+  "Charities report that people smuggling networks have adapted their methods, using larger boats and more dangerous routes to avoid detection",
+  "The Monetary Policy Committee voted seven to two to maintain the base rate at 5.25%, citing persistent services inflation as a key concern",
+  "Air quality alerts issued across the northeastern United States as smoke from hundreds of wildfires in Quebec drifts south into populated areas",
+  "European Commission opens formal investigation into potential national security risks posed by the social media platform's data practices",
+  "Senior figures in the SNP clash publicly over whether an independent Scotland should adopt its own currency immediately or keep the pound",
+  "Research following 50,000 participants over two decades suggests excessive protein intake may activate cellular pathways associated with faster biological ageing",
+  "The seven-year inquiry concludes that the tragedy was the result of decades of failure by government and the construction industry",
+  "Environmental groups release data showing untreated sewage discharged into English and Welsh rivers for more than 3.6 million hours last year",
+];
+
+let cardCount = 500;
+let preparedHeadlines = [];
+let preparedStandfirsts = [];
+
+function getHeadline(i) { return HEADLINES[i % HEADLINES.length]; }
+function getStandfirst(i) { return STANDFIRSTS[i % STANDFIRSTS.length]; }
+
+function buildCards(container, count) {
+  container.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < count; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="card-headline">${getHeadline(i)}</div><div class="card-standfirst">${getStandfirst(i)}</div>`;
+    frag.appendChild(card);
+  }
+  container.appendChild(frag);
+}
+
+async function prepareAllTexts(count) {
+  preparedHeadlines = [];
+  preparedStandfirsts = [];
+  for (let i = 0; i < count; i++) {
+    const h = prepare(getHeadline(i), "700 15px/1.25 Georgia, 'Times New Roman', serif");
+    const s = prepare(getStandfirst(i), "400 13px/1.4 Georgia, 'Times New Roman', serif");
+    preparedHeadlines.push(h);
+    preparedStandfirsts.push(s);
+  }
+}
+
+function measureDOM(container, width) {
+  const cards = container.querySelectorAll('.card');
+  const start = performance.now();
+  // Force layout thrashing: read offsetHeight for each card interleaved with style writes
+  const heights = [];
+  cards.forEach(card => {
+    card.style.width = width + 'px';
+    heights.push(card.offsetHeight); // forces reflow each time
+  });
+  const elapsed = performance.now() - start;
+  return elapsed;
+}
+
+function measurePretext(count, width) {
+  const padding = 20; // 10px padding each side
+  const availableWidth = width - padding;
+  const start = performance.now();
+  for (let i = 0; i < count; i++) {
+    const hResult = layout(preparedHeadlines[i], availableWidth); // { lineCount, height: null }
+    const sResult = layout(preparedStandfirsts[i], availableWidth); // { lineCount, height: null }
+    // Use lineCount to simulate work (height is always null; compute as lineCount * lineHeightPx if needed)
+    void hResult.lineCount;
+    void sResult.lineCount;
+  }
+  const elapsed = performance.now() - start;
+  return elapsed;
+}
+
+const domGrid = document.getElementById('domGrid');
+const pretextGrid = document.getElementById('pretextGrid');
+const widthSlider = document.getElementById('widthSlider');
+const widthValue = document.getElementById('widthValue');
+const domTimeEl = document.getElementById('domTime');
+const pretextTimeEl = document.getElementById('pretextTime');
+const speedupEl = document.getElementById('speedup');
+const domPanelTime = document.getElementById('domPanelTime');
+const pretextPanelTime = document.getElementById('pretextPanelTime');
+const loadingEl = document.getElementById('loading');
+
+function updateGridWidth(width) {
+  domGrid.style.setProperty('--card-width', width + 'px');
+  pretextGrid.style.setProperty('--card-width', width + 'px');
+}
+
+function runBenchmark(width) {
+  const domMs = measureDOM(domGrid, width);
+  const pretextMs = measurePretext(cardCount, width);
+
+  const domStr = domMs.toFixed(2) + 'ms';
+  const pretextStr = pretextMs.toFixed(2) + 'ms';
+  const ratio = domMs / Math.max(pretextMs, 0.001);
+
+  domTimeEl.textContent = domStr;
+  pretextTimeEl.textContent = pretextStr;
+  speedupEl.textContent = ratio.toFixed(0) + 'x';
+  domPanelTime.textContent = domStr;
+  pretextPanelTime.textContent = pretextStr;
+}
+
+let rafId = null;
+widthSlider.addEventListener('input', () => {
+  const w = parseInt(widthSlider.value);
+  widthValue.textContent = w + 'px';
+  updateGridWidth(w);
+  if (rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(() => runBenchmark(w));
+});
+
+document.querySelectorAll('.card-count-btns button').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    document.querySelectorAll('.card-count-btns button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    cardCount = parseInt(btn.dataset.count);
+    loadingEl.classList.remove('hidden');
+    // Yield to let loading overlay paint
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    await init(cardCount);
+    loadingEl.classList.add('hidden');
+  });
+});
+
+async function init(count) {
+  buildCards(domGrid, count);
+  buildCards(pretextGrid, count);
+  const w = parseInt(widthSlider.value);
+  updateGridWidth(w);
+  await prepareAllTexts(count);
+  runBenchmark(w);
+}
+
+// Wait for fonts then init
+document.fonts.ready.then(async () => {
+  await init(cardCount);
+  loadingEl.classList.add('hidden');
+});
+</script>
+</body>
+</html>

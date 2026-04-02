@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pretext Demo 2: Fluid Cutout Article Layout</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #F6F6F6;
+    color: #121212;
+    line-height: 1.65;
+  }
+
+  .demo-header {
+    background: #052962;
+    color: #fff;
+    padding: 24px 0;
+    border-bottom: 4px solid #FFE500;
+  }
+  .demo-header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .demo-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .demo-header p {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    opacity: 0.85;
+    max-width: 800px;
+    line-height: 1.5;
+  }
+
+  .controls-bar {
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .controls-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #333;
+  }
+  .controls-inner label { font-weight: 600; }
+  .controls-inner input[type="range"] { width: 140px; accent-color: #052962; }
+
+  .metric {
+    text-align: center;
+    min-width: 80px;
+    margin-left: auto;
+  }
+  .metric-value {
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #052962;
+  }
+  .metric-label {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .article-container {
+    max-width: 780px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+
+  .article-meta {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: #C70000;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    border-top: 4px solid #C70000;
+    padding-top: 6px;
+  }
+  .article-headline {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .article-standfirst {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 16px;
+    border-left: 4px solid #052962;
+    padding-left: 12px;
+  }
+  .article-byline {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #dcdcdc;
+  }
+  .article-byline strong { color: #052962; }
+
+  .text-flow-area {
+    position: relative;
+    min-height: 600px;
+    background: #fff;
+    padding: 24px;
+    border-radius: 4px;
+  }
+
+  .cutout-image {
+    position: absolute;
+    cursor: grab;
+    z-index: 10;
+    user-select: none;
+    -webkit-user-select: none;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.15));
+    transition: filter 0.2s;
+  }
+  .cutout-image:hover, .cutout-image.dragging {
+    filter: drop-shadow(0 6px 30px rgba(0,0,0,0.25));
+    cursor: grabbing;
+  }
+
+  .text-line {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #121212;
+    transition: none;
+  }
+
+  .drag-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(5, 41, 98, 0.85);
+    padding: 4px 10px;
+    border-radius: 3px;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.5s;
+    z-index: 11;
+  }
+  .drag-hint.hidden { opacity: 0; }
+
+  .fps-counter {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background: #052962;
+    color: #FFE500;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 4px;
+    z-index: 200;
+  }
+
+  .image-outline {
+    position: absolute;
+    border: 2px dashed rgba(5, 41, 98, 0.2);
+    border-radius: 4px;
+    pointer-events: none;
+    z-index: 5;
+  }
+</style>
+</head>
+<body>
+
+<header class="demo-header">
+  <div class="demo-header-inner">
+    <h1>Demo 2: Fluid Cutout Article Layout</h1>
+    <p>Drag the image around the article. Text reflows in real-time using <code>layoutNextLine()</code> with variable widths per line -- the text parts like water around the cutout. Each line is an individually positioned <code>&lt;span&gt;</code>.</p>
+  </div>
+</header>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <label>Image size:</label>
+    <input type="range" id="sizeSlider" min="120" max="350" value="220">
+    <span id="sizeValue">220px</span>
+    <label>Margin:</label>
+    <input type="range" id="marginSlider" min="0" max="30" value="12">
+    <span id="marginValue">12px</span>
+    <div class="metric">
+      <div class="metric-value" id="layoutTime">--</div>
+      <div class="metric-label">Layout time</div>
+    </div>
+  </div>
+</div>
+
+<div class="article-container">
+  <div class="article-meta">The long read</div>
+  <h1 class="article-headline">The photographer who vanished into the wilderness</h1>
+  <p class="article-standfirst">In 2019, acclaimed nature photographer Lena Voronova walked into the Siberian taiga and never came back. Her final images tell a story of obsession, solitude and the seductive pull of the wild.</p>
+  <div class="article-byline"><strong>Jon Henley</strong> Senior international correspondent &middot; Mon 31 Mar 2026</div>
+
+  <div class="text-flow-area" id="flowArea">
+    <div class="image-outline" id="imageOutline"></div>
+
+    <!-- SVG silhouette cutout -->
+    <svg id="cutoutImage" class="cutout-image" width="220" height="300" viewBox="0 0 220 300" style="left: 380px; top: 20px;">
+      <defs>
+        <linearGradient id="silGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#052962;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#0a4a9e;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <!-- Person with camera silhouette -->
+      <ellipse cx="110" cy="42" rx="28" ry="32" fill="url(#silGrad)"/>
+      <path d="M70 80 Q75 65 110 62 Q145 65 150 80 L160 140 Q162 160 150 175 L145 200 L150 280 Q150 295 140 295 L130 295 Q125 295 125 280 L120 210 L110 210 L100 210 L95 280 Q95 295 90 295 L80 295 Q70 295 70 280 L75 200 L70 175 Q58 160 60 140 Z" fill="url(#silGrad)"/>
+      <!-- Camera -->
+      <rect x="150" y="100" width="45" height="30" rx="4" fill="#333"/>
+      <circle cx="172" cy="115" r="10" fill="#555" stroke="#333" stroke-width="2"/>
+      <circle cx="172" cy="115" r="5" fill="#1a1a1a"/>
+      <rect x="160" y="95" width="20" height="8" rx="2" fill="#444"/>
+      <!-- Camera strap -->
+      <path d="M152 105 Q140 90 145 80" stroke="#444" stroke-width="3" fill="none"/>
+    </svg>
+
+    <div class="drag-hint" id="dragHint">Drag me around</div>
+    <div id="textLines"></div>
+  </div>
+</div>
+
+<div class="fps-counter" id="fpsCounter">-- FPS</div>
+
+<script type="module">
+import { prepareWithSegments, layout, layoutNextLine } from 'https://esm.sh/@chenglou/pretext@0.0.3';
+
+const ARTICLE_TEXT = `The last photograph Lena Voronova posted to her social media account showed a frozen river at dawn, the water a ribbon of silver threading through a landscape so vast and white it seemed to dissolve into the sky. She captioned it with a single word: "Home." That was on the 14th of November, 2019. Nobody has heard from her since.
+
+Voronova was not the sort of person who disappeared easily. At forty-three, she was one of Russia's most celebrated nature photographers, her work published in National Geographic, the Guardian's weekend magazine, and dozens of international exhibitions. Her images of Siberian wildlife -- wolves moving through birch forests, the eerie green aurora reflected in a bear's eye -- had a quality that set them apart from the usual nature photography. They felt intimate, as though she had been accepted by the wilderness rather than merely observing it.
+
+Those who knew her say the intimacy was real. Over the decade before her disappearance, Voronova had been spending progressively longer periods in the taiga, the immense boreal forest that stretches across northern Russia. What began as two-week photography expeditions became month-long stays, then seasons. She sold her apartment in Moscow. She stopped attending gallery openings. Her communications with friends became sporadic, then rare.
+
+"She was moving further in," says Dmitri Volkov, who had been her editor at a Russian photography magazine. "Each time she went out, she came back with more extraordinary images, but she also came back a little more distant. It was as if the forest was claiming her, piece by piece."
+
+The taiga is the world's largest land biome, covering more than five million square miles across Russia, Canada, and Scandinavia. In Siberia, it is a place of almost incomprehensible scale -- you could fly for hours and see nothing below but an unbroken canopy of larch and spruce, interrupted only by rivers and the occasional dirt road leading to a village that might house thirty people.
+
+It is also a place of extraordinary beauty and extreme danger. Winter temperatures can drop below minus fifty degrees Celsius. Bears, wolves, and the Siberian tiger patrol its depths. The distances between human settlements are so great that a broken ankle or a lost compass bearing can be a death sentence. Every year, people vanish into the taiga and are never found.
+
+Voronova understood these risks better than most. She had spent years learning survival skills from indigenous Evenki communities, and her equipment was meticulously chosen and maintained. She carried satellite communication devices and emergency beacons. She filed detailed route plans with local authorities. She was, by all accounts, a supremely competent wilderness traveller.
+
+Which is what makes her disappearance so haunting. When she walked into the forest that November morning, she was heading for a familiar area -- a river valley she had photographed many times before, roughly sixty kilometres from the nearest village. Her route plan indicated a three-week stay. She had food for a month, winter camping gear rated to minus sixty, and a fully charged satellite phone.
+
+The emergency signal never came. When she failed to return after four weeks, search and rescue teams were dispatched. They found her base camp -- tent intact, food supplies largely untouched, camera equipment neatly organized. Her satellite phone was there, powered off. Her emergency beacon was there, unused. The only things missing were Voronova herself and one of her cameras.
+
+Tracks leading away from the camp suggested she had walked north, deeper into the forest, on a morning when fresh snow had fallen. The tracks continued for several kilometres before the trail was obliterated by a subsequent snowfall. Aerial searches over the following weeks found nothing. The investigation remains officially open, classified as a missing persons case.`;
+
+// Split into paragraphs and prepare each separately (Pretext collapses \n)
+const PARAGRAPHS = ARTICLE_TEXT.split('\n\n').filter(p => p.trim());
+let preparedParagraphs = [];
+let imageX = 380;
+let imageY = 20;
+let imageW = 220;
+let imageH = 300;
+let flowMargin = 12;
+let isDragging = false;
+let dragOffX = 0, dragOffY = 0;
+
+const flowArea = document.getElementById('flowArea');
+const cutoutImage = document.getElementById('cutoutImage');
+const imageOutline = document.getElementById('imageOutline');
+const textLinesContainer = document.getElementById('textLines');
+const dragHint = document.getElementById('dragHint');
+const sizeSlider = document.getElementById('sizeSlider');
+const sizeValue = document.getElementById('sizeValue');
+const marginSlider = document.getElementById('marginSlider');
+const marginValue = document.getElementById('marginValue');
+const layoutTimeEl = document.getElementById('layoutTime');
+const fpsCounter = document.getElementById('fpsCounter');
+
+const FONT_SIZE = 17;
+const LINE_HEIGHT = 1.65;
+const LINE_HEIGHT_PX = Math.round(FONT_SIZE * LINE_HEIGHT);
+
+function updateImagePosition() {
+  cutoutImage.style.left = imageX + 'px';
+  cutoutImage.style.top = imageY + 'px';
+  cutoutImage.setAttribute('width', imageW);
+  cutoutImage.setAttribute('height', imageH);
+
+  imageOutline.style.left = (imageX - flowMargin) + 'px';
+  imageOutline.style.top = (imageY - flowMargin) + 'px';
+  imageOutline.style.width = (imageW + flowMargin * 2) + 'px';
+  imageOutline.style.height = (imageH + flowMargin * 2) + 'px';
+
+  dragHint.style.left = (imageX + imageW / 2) + 'px';
+  dragHint.style.top = (imageY + imageH / 2) + 'px';
+}
+
+function reflowText() {
+  if (preparedParagraphs.length === 0) return;
+
+  const start = performance.now();
+  const areaWidth = flowArea.clientWidth - 48; // 24px padding each side
+
+  // Image blocked region (with margin)
+  const imgLeft = imageX - flowMargin;
+  const imgRight = imageX + imageW + flowMargin;
+  const imgTop = imageY - flowMargin;
+  const imgBottom = imageY + imageH + flowMargin;
+
+  const lineData = [];
+  let currentY = 0;
+  let safety = 0;
+
+  for (let pi = 0; pi < preparedParagraphs.length && safety < 500; pi++) {
+    const prepared = preparedParagraphs[pi];
+    let pos = { segmentIndex: 0, graphemeIndex: 0 };
+
+    while (safety++ < 500) {
+      const lineTop = currentY;
+      const lineBottom = currentY + LINE_HEIGHT_PX;
+
+      // Compute available width based on image overlap
+      let availWidth = areaWidth;
+      let xOffset = 0;
+
+      if (lineBottom > imgTop && lineTop < imgBottom) {
+        if (imgLeft <= 0) {
+          availWidth = areaWidth - imgRight;
+          xOffset = imgRight;
+        } else if (imgRight >= areaWidth) {
+          availWidth = imgLeft;
+          xOffset = 0;
+        } else {
+          const leftSpace = imgLeft;
+          const rightSpace = areaWidth - imgRight;
+          if (leftSpace >= rightSpace) {
+            availWidth = leftSpace;
+            xOffset = 0;
+          } else {
+            availWidth = rightSpace;
+            xOffset = imgRight;
+          }
+        }
+      }
+
+      availWidth = Math.max(availWidth, 60);
+
+      const line = layoutNextLine(prepared, pos, availWidth);
+      if (!line) break;
+
+      lineData.push({ text: line.text.trim(), x: xOffset, y: currentY, width: availWidth });
+      pos = line.end;
+      currentY += LINE_HEIGHT_PX;
+    }
+
+    // Paragraph gap
+    currentY += Math.round(LINE_HEIGHT_PX * 0.6);
+  }
+
+  const elapsed = performance.now() - start;
+  layoutTimeEl.textContent = elapsed.toFixed(1) + 'ms';
+
+  // Render lines as positioned spans
+  textLinesContainer.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  for (const line of lineData) {
+    const span = document.createElement('div');
+    span.className = 'text-line';
+    span.style.left = (24 + line.x) + 'px';
+    span.style.top = (24 + line.y) + 'px';
+    span.style.width = line.width + 'px';
+    span.style.whiteSpace = 'normal';
+    span.style.overflow = 'hidden';
+    span.style.textOverflow = 'ellipsis';
+    span.textContent = line.text;
+    frag.appendChild(span);
+  }
+  textLinesContainer.appendChild(frag);
+
+  // Update flow area height
+  if (lineData.length > 0) {
+    const lastLine = lineData[lineData.length - 1];
+    flowArea.style.minHeight = (lastLine.y + LINE_HEIGHT_PX + 48) + 'px';
+  }
+}
+
+// Dragging
+cutoutImage.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  cutoutImage.classList.add('dragging');
+  dragHint.classList.add('hidden');
+  const rect = flowArea.getBoundingClientRect();
+  dragOffX = e.clientX - rect.left - imageX;
+  dragOffY = e.clientY - rect.top - imageY;
+  e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const rect = flowArea.getBoundingClientRect();
+  const areaW = flowArea.clientWidth - 48;
+  const areaH = flowArea.clientHeight - 48;
+
+  imageX = Math.max(0, Math.min(areaW - imageW, e.clientX - rect.left - dragOffX));
+  imageY = Math.max(0, Math.min(areaH - imageH, e.clientY - rect.top - dragOffY));
+
+  updateImagePosition();
+  requestAnimationFrame(reflowText);
+});
+
+document.addEventListener('mouseup', () => {
+  if (isDragging) {
+    isDragging = false;
+    cutoutImage.classList.remove('dragging');
+  }
+});
+
+// Touch support
+cutoutImage.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  cutoutImage.classList.add('dragging');
+  dragHint.classList.add('hidden');
+  const rect = flowArea.getBoundingClientRect();
+  const touch = e.touches[0];
+  dragOffX = touch.clientX - rect.left - imageX;
+  dragOffY = touch.clientY - rect.top - imageY;
+  e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  const rect = flowArea.getBoundingClientRect();
+  const touch = e.touches[0];
+  const areaW = flowArea.clientWidth - 48;
+  const areaH = flowArea.clientHeight - 48;
+
+  imageX = Math.max(0, Math.min(areaW - imageW, touch.clientX - rect.left - dragOffX));
+  imageY = Math.max(0, Math.min(areaH - imageH, touch.clientY - rect.top - dragOffY));
+
+  updateImagePosition();
+  requestAnimationFrame(reflowText);
+}, { passive: false });
+
+document.addEventListener('touchend', () => {
+  if (isDragging) {
+    isDragging = false;
+    cutoutImage.classList.remove('dragging');
+  }
+});
+
+// Controls
+sizeSlider.addEventListener('input', () => {
+  const s = parseInt(sizeSlider.value);
+  sizeValue.textContent = s + 'px';
+  const ratio = imageH / imageW;
+  imageW = s;
+  imageH = Math.round(s * ratio);
+  updateImagePosition();
+  reflowText();
+});
+
+marginSlider.addEventListener('input', () => {
+  flowMargin = parseInt(marginSlider.value);
+  marginValue.textContent = flowMargin + 'px';
+  updateImagePosition();
+  reflowText();
+});
+
+// FPS counter
+let frames = 0, lastFpsTime = performance.now();
+function updateFps() {
+  frames++;
+  const now = performance.now();
+  if (now - lastFpsTime >= 1000) {
+    fpsCounter.textContent = frames + ' FPS';
+    frames = 0;
+    lastFpsTime = now;
+  }
+  requestAnimationFrame(updateFps);
+}
+requestAnimationFrame(updateFps);
+
+// Init
+document.fonts.ready.then(() => {
+  const font = "17px/1.65 Georgia, serif";
+  preparedParagraphs = PARAGRAPHS.map(p => prepareWithSegments(p.trim(), font));
+  updateImagePosition();
+  reflowText();
+});
+</script>
+</body>
+</html>

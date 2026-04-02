@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pretext Demo 4: Canvas Data Journalism</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #121212;
+    color: #F6F6F6;
+    line-height: 1.5;
+    overflow: hidden;
+  }
+
+  .demo-header {
+    background: #052962;
+    color: #fff;
+    padding: 16px 0;
+    border-bottom: 4px solid #FFE500;
+    position: relative;
+    z-index: 10;
+  }
+  .demo-header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .demo-header h1 { font-size: 22px; font-weight: 700; }
+  .demo-header p {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    opacity: 0.8;
+    max-width: 600px;
+  }
+
+  .canvas-container {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 68px);
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    z-index: 5;
+  }
+</style>
+</head>
+<body>
+
+<header class="demo-header">
+  <div class="demo-header-inner">
+    <div>
+      <h1>Demo 4: Canvas Data Journalism</h1>
+      <p>Climate temperature anomaly chart rendered entirely on Canvas. Hover data points to see Pretext-wrapped annotation callouts -- no DOM overlays. Text adapts width near screen edges.</p>
+    </div>
+  </div>
+</header>
+
+<div class="canvas-container">
+  <canvas id="chart"></canvas>
+  <div class="legend">Source: NASA GISS / HadCRUT5 &middot; Baseline: 1951-1980 average &middot; Hover points for annotations</div>
+</div>
+
+<script type="module">
+import { prepareWithSegments, layout, layoutWithLines } from 'https://esm.sh/@chenglou/pretext@0.0.3';
+
+// Temperature anomaly data (global mean, degrees C above 1951-1980 baseline)
+const DATA = [
+  { year: 1880, anomaly: -0.16, note: "" },
+  { year: 1885, anomaly: -0.25, note: "" },
+  { year: 1890, anomaly: -0.35, note: "" },
+  { year: 1895, anomaly: -0.22, note: "" },
+  { year: 1900, anomaly: -0.08, note: "" },
+  { year: 1905, anomaly: -0.27, note: "" },
+  { year: 1910, anomaly: -0.42, note: "" },
+  { year: 1915, anomaly: -0.15, note: "" },
+  { year: 1920, anomaly: -0.25, note: "" },
+  { year: 1925, anomaly: -0.18, note: "" },
+  { year: 1930, anomaly: -0.09, note: "" },
+  { year: 1935, anomaly: -0.14, note: "" },
+  { year: 1940, anomaly: 0.10, note: "WWII-era industrial surge begins to warm the atmosphere" },
+  { year: 1945, anomaly: 0.09, note: "" },
+  { year: 1950, anomaly: -0.16, note: "" },
+  { year: 1955, anomaly: -0.14, note: "" },
+  { year: 1960, anomaly: 0.03, note: "" },
+  { year: 1965, anomaly: -0.11, note: "" },
+  { year: 1970, anomaly: 0.02, note: "" },
+  { year: 1975, anomaly: -0.01, note: "" },
+  { year: 1980, anomaly: 0.26, note: "" },
+  { year: 1985, anomaly: 0.12, note: "" },
+  { year: 1988, anomaly: 0.39, note: "James Hansen testifies to US Congress that global warming has begun" },
+  { year: 1990, anomaly: 0.45, note: "" },
+  { year: 1992, anomaly: 0.22, note: "Mount Pinatubo eruption temporarily cools the planet by 0.5C" },
+  { year: 1995, anomaly: 0.45, note: "" },
+  { year: 1997, anomaly: 0.46, note: "Kyoto Protocol signed by 192 nations" },
+  { year: 2000, anomaly: 0.42, note: "" },
+  { year: 2005, anomaly: 0.68, note: "Hottest year on record at the time; Hurricane Katrina devastates Gulf Coast" },
+  { year: 2010, anomaly: 0.72, note: "" },
+  { year: 2012, anomaly: 0.64, note: "Arctic sea ice hits lowest extent ever recorded by satellite" },
+  { year: 2015, anomaly: 0.87, note: "Paris Agreement adopted; nations pledge to limit warming to 1.5C" },
+  { year: 2016, anomaly: 1.01, note: "First year to breach 1.0C above pre-industrial baseline" },
+  { year: 2017, anomaly: 0.92, note: "" },
+  { year: 2018, anomaly: 0.85, note: "" },
+  { year: 2019, anomaly: 0.98, note: "Global climate strikes draw millions of young people to the streets" },
+  { year: 2020, anomaly: 1.02, note: "Tied for hottest year despite La Nina cooling; Covid lockdowns cut emissions 7%" },
+  { year: 2021, anomaly: 0.85, note: "" },
+  { year: 2022, anomaly: 0.89, note: "" },
+  { year: 2023, anomaly: 1.17, note: "Shatters previous record; scientists call it a climate emergency turning point" },
+  { year: 2024, anomaly: 1.29, note: "Hottest year in recorded history; first full year above 1.5C threshold" },
+  { year: 2025, anomaly: 1.35, note: "Third consecutive record year; 1.5C Paris target breached for 18 straight months" },
+];
+
+const ANNOTATIONS = DATA.filter(d => d.note);
+
+const canvas = document.getElementById('chart');
+const ctx = canvas.getContext('2d');
+
+let W, H, dpr;
+let mouseX = -1, mouseY = -1;
+let hoveredPoint = null;
+let particles = [];
+let preparedAnnotations = new Map();
+
+// Chart layout
+const MARGIN = { top: 80, right: 60, bottom: 60, left: 70 };
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = canvas.parentElement.clientWidth;
+  H = canvas.parentElement.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function xScale(year) {
+  const minYear = 1880, maxYear = 2025;
+  return MARGIN.left + (year - minYear) / (maxYear - minYear) * (W - MARGIN.left - MARGIN.right);
+}
+
+function yScale(anomaly) {
+  const minA = -0.5, maxA = 1.5;
+  return H - MARGIN.bottom - (anomaly - minA) / (maxA - minA) * (H - MARGIN.top - MARGIN.bottom);
+}
+
+// Prepare annotation text with Pretext
+function prepareAnnotations() {
+  preparedAnnotations.clear();
+  for (const d of ANNOTATIONS) {
+    const text = `${d.year}: ${d.note}`;
+    const prepared = prepareWithSegments(text, "13px/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif");
+    preparedAnnotations.set(d.year, { prepared, text });
+  }
+}
+
+// Particles
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < 120; i++) {
+    const d = DATA[Math.floor(Math.random() * DATA.length)];
+    particles.push({
+      x: xScale(d.year) + (Math.random() - 0.5) * 40,
+      y: yScale(d.anomaly) + (Math.random() - 0.5) * 30,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -Math.random() * 0.5 - 0.2,
+      life: Math.random(),
+      maxLife: 0.6 + Math.random() * 0.4,
+      size: 1 + Math.random() * 2,
+      anomaly: d.anomaly,
+    });
+  }
+}
+
+function updateParticles() {
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life += 0.003;
+    if (p.life >= p.maxLife) {
+      const d = DATA[Math.floor(Math.random() * DATA.length)];
+      p.x = xScale(d.year) + (Math.random() - 0.5) * 40;
+      p.y = yScale(d.anomaly) + (Math.random() - 0.5) * 10;
+      p.life = 0;
+      p.anomaly = d.anomaly;
+    }
+  }
+}
+
+function anomalyColor(a, alpha = 1) {
+  if (a <= 0) {
+    const t = Math.min(1, Math.abs(a) / 0.5);
+    const r = Math.round(30 + (1 - t) * 50);
+    const g = Math.round(100 + (1 - t) * 80);
+    const b = Math.round(200 + (1 - t) * 55);
+    return `rgba(${r},${g},${b},${alpha})`;
+  } else {
+    const t = Math.min(1, a / 1.5);
+    const r = Math.round(200 + t * 55);
+    const g = Math.round(120 - t * 80);
+    const b = Math.round(30);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+}
+
+function drawGrid() {
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+
+  // Horizontal grid lines
+  for (let a = -0.5; a <= 1.5; a += 0.5) {
+    const y = yScale(a);
+    ctx.beginPath();
+    ctx.moveTo(MARGIN.left, y);
+    ctx.lineTo(W - MARGIN.right, y);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = "12px 'Helvetica Neue', sans-serif";
+    ctx.textAlign = 'right';
+    ctx.fillText((a >= 0 ? '+' : '') + a.toFixed(1) + '°C', MARGIN.left - 10, y + 4);
+  }
+
+  // Zero baseline
+  const zeroY = yScale(0);
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(MARGIN.left, zeroY);
+  ctx.lineTo(W - MARGIN.right, zeroY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 1.5C threshold
+  const threshY = yScale(1.5);
+  ctx.strokeStyle = 'rgba(199, 0, 0, 0.5)';
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(MARGIN.left, threshY);
+  ctx.lineTo(W - MARGIN.right, threshY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(199, 0, 0, 0.6)';
+  ctx.font = "bold 11px 'Helvetica Neue', sans-serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('1.5°C Paris limit', W - MARGIN.right + 6, threshY + 4);
+
+  // Year labels
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.font = "12px 'Helvetica Neue', sans-serif";
+  ctx.textAlign = 'center';
+  for (let yr = 1880; yr <= 2025; yr += 20) {
+    const x = xScale(yr);
+    ctx.fillText(yr.toString(), x, H - MARGIN.bottom + 24);
+  }
+}
+
+function drawLine() {
+  // Gradient filled area under the line
+  ctx.beginPath();
+  ctx.moveTo(xScale(DATA[0].year), yScale(DATA[0].anomaly));
+  for (let i = 1; i < DATA.length; i++) {
+    ctx.lineTo(xScale(DATA[i].year), yScale(DATA[i].anomaly));
+  }
+  const grad = ctx.createLinearGradient(0, yScale(1.5), 0, yScale(-0.5));
+  grad.addColorStop(0, 'rgba(199, 0, 0, 0.25)');
+  grad.addColorStop(0.5, 'rgba(200, 120, 30, 0.1)');
+  grad.addColorStop(1, 'rgba(30, 100, 200, 0.15)');
+  ctx.lineTo(xScale(DATA[DATA.length - 1].year), yScale(-0.5));
+  ctx.lineTo(xScale(DATA[0].year), yScale(-0.5));
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Main line
+  ctx.beginPath();
+  ctx.moveTo(xScale(DATA[0].year), yScale(DATA[0].anomaly));
+  for (let i = 1; i < DATA.length; i++) {
+    ctx.lineTo(xScale(DATA[i].year), yScale(DATA[i].anomaly));
+  }
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // Data points
+  for (const d of DATA) {
+    const x = xScale(d.year);
+    const y = yScale(d.anomaly);
+    const isAnnotated = d.note !== '';
+    const isHovered = hoveredPoint === d;
+
+    ctx.beginPath();
+    ctx.arc(x, y, isHovered ? 8 : isAnnotated ? 5 : 3, 0, Math.PI * 2);
+    ctx.fillStyle = isHovered
+      ? '#FFE500'
+      : isAnnotated
+        ? anomalyColor(d.anomaly, 1)
+        : anomalyColor(d.anomaly, 0.7);
+    ctx.fill();
+
+    if (isAnnotated && !isHovered) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    if (isHovered) {
+      ctx.strokeStyle = '#FFE500';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    const alpha = Math.max(0, 1 - p.life / p.maxLife) * 0.4;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = anomalyColor(p.anomaly, alpha);
+    ctx.fill();
+  }
+}
+
+function drawTitle() {
+  ctx.fillStyle = '#fff';
+  ctx.font = "bold 26px Georgia, 'Times New Roman', serif";
+  ctx.textAlign = 'left';
+  ctx.fillText('Global Temperature Anomaly, 1880-2025', MARGIN.left, 40);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = "14px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+  ctx.fillText('Degrees Celsius above 1951-1980 average  |  Hover annotated points for context', MARGIN.left, 62);
+}
+
+// Draw Pretext-powered callout on Canvas
+function drawCallout(d) {
+  const annotation = preparedAnnotations.get(d.year);
+  if (!annotation) return;
+
+  const px = xScale(d.year);
+  const py = yScale(d.anomaly);
+
+  // Determine callout width based on proximity to screen edges
+  const maxCalloutWidth = 280;
+  const minCalloutWidth = 180;
+  const edgeMargin = 30;
+
+  let calloutWidth = maxCalloutWidth;
+  const spaceRight = W - px - edgeMargin;
+  const spaceLeft = px - edgeMargin;
+
+  // Decide if callout goes left or right of the point
+  let calloutX;
+  let anchorSide; // 'left' means callout is to the right of point
+  if (spaceRight >= calloutWidth + 40) {
+    calloutX = px + 20;
+    anchorSide = 'left';
+  } else if (spaceLeft >= calloutWidth + 40) {
+    calloutX = px - 20 - calloutWidth;
+    anchorSide = 'right';
+  } else {
+    // Tight space — shrink callout
+    calloutWidth = Math.max(minCalloutWidth, Math.min(spaceRight, spaceLeft) - 40);
+    if (spaceRight > spaceLeft) {
+      calloutX = px + 20;
+      anchorSide = 'left';
+    } else {
+      calloutX = px - 20 - calloutWidth;
+      anchorSide = 'right';
+    }
+  }
+
+  // Use Pretext to layout the text at this width
+  const lineHeightPx = 13 * 1.4;
+  const textWidth = calloutWidth - 20; // 10px padding each side
+  const result = layoutWithLines(annotation.prepared, textWidth);
+  const textHeight = result.lineCount * lineHeightPx;
+  const boxHeight = textHeight + 20; // 10px padding top/bottom
+
+  let calloutY = py - boxHeight / 2;
+  // Clamp to screen
+  calloutY = Math.max(MARGIN.top, Math.min(H - MARGIN.bottom - boxHeight, calloutY));
+
+  // Draw connector line
+  ctx.strokeStyle = 'rgba(255, 229, 0, 0.5)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(px, py);
+  ctx.lineTo(anchorSide === 'left' ? calloutX : calloutX + calloutWidth, calloutY + boxHeight / 2);
+  ctx.stroke();
+
+  // Draw callout box
+  const radius = 4;
+  ctx.beginPath();
+  ctx.roundRect(calloutX, calloutY, calloutWidth, boxHeight, radius);
+  ctx.fillStyle = 'rgba(5, 41, 98, 0.92)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255, 229, 0, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Draw each line from Pretext layoutWithLines result
+  ctx.textAlign = 'left';
+  const lines = result.lines;
+
+  for (let i = 0; i < lines.length; i++) {
+    const lineText = lines[i].text;
+    const ty = calloutY + 10 + 13 + i * lineHeightPx; // padding + font baseline + line offset
+
+    // Bold the year part on the first line
+    if (i === 0 && lineText.match(/^\d{4}:/)) {
+      const yearPart = lineText.match(/^(\d{4}:)(.*)/);
+      if (yearPart) {
+        ctx.font = "bold 13px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+        ctx.fillStyle = '#FFE500';
+        ctx.fillText(yearPart[1], calloutX + 10, ty);
+        const yearWidth = ctx.measureText(yearPart[1] + ' ').width;
+        ctx.font = "13px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+        ctx.fillStyle = '#fff';
+        ctx.fillText(yearPart[2].trim(), calloutX + 10 + yearWidth, ty);
+      }
+    } else {
+      ctx.font = "13px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+      ctx.fillStyle = '#fff';
+      ctx.fillText(lineText, calloutX + 10, ty);
+    }
+  }
+
+  // Anomaly value badge
+  const badgeText = (d.anomaly >= 0 ? '+' : '') + d.anomaly.toFixed(2) + '°C';
+  ctx.font = "bold 11px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+  const badgeW = ctx.measureText(badgeText).width + 12;
+  const badgeX = calloutX + calloutWidth - badgeW - 6;
+  const badgeY = calloutY + boxHeight - 22;
+  ctx.fillStyle = anomalyColor(d.anomaly, 0.8);
+  ctx.beginPath();
+  ctx.roundRect(badgeX, badgeY, badgeW, 18, 3);
+  ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.fillText(badgeText, badgeX + badgeW / 2, badgeY + 13);
+}
+
+// Hit detection
+function findHoveredPoint(mx, my) {
+  let closest = null;
+  let closestDist = 25; // max hover distance in pixels
+  for (const d of DATA) {
+    if (!d.note) continue; // only annotated points
+    const dx = mx - xScale(d.year);
+    const dy = my - yScale(d.anomaly);
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closest = d;
+    }
+  }
+  return closest;
+}
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+  const newHovered = findHoveredPoint(mouseX, mouseY);
+  if (newHovered !== hoveredPoint) {
+    hoveredPoint = newHovered;
+    canvas.style.cursor = hoveredPoint ? 'pointer' : 'default';
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  mouseX = -1;
+  mouseY = -1;
+  hoveredPoint = null;
+});
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0, '#0a0a1a');
+  bgGrad.addColorStop(1, '#121220');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  drawParticles();
+  drawGrid();
+  drawLine();
+  drawTitle();
+
+  if (hoveredPoint) {
+    drawCallout(hoveredPoint);
+  }
+
+  updateParticles();
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => {
+  resize();
+  initParticles();
+});
+
+document.fonts.ready.then(() => {
+  resize();
+  prepareAnnotations();
+  initParticles();
+  requestAnimationFrame(draw);
+});
+</script>
+</body>
+</html>

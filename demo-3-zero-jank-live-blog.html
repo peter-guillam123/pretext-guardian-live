@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Israel expands invasion of southern Lebanon | Pretext Demo</title>
+<style>
+  @font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-headline/noalts-not-hinted/GHGuardianHeadline-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-headline/noalts-not-hinted/GHGuardianHeadline-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textegyptian/noalts-not-hinted/GuardianTextEgyptian-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Sans Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textsans/noalts-not-hinted/GuardianTextSans-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Sans Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textsans/noalts-not-hinted/GuardianTextSans-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    background: #F6F6F6;
+    color: #121212;
+    line-height: 1.4;
+  }
+
+  /* ── PILLAR BAR ── */
+  .pillar-bar { height: 4px; background: #C70000; }
+
+  /* ── HEADER ── */
+  .blog-header {
+    background: #AB0613;
+    color: #fff;
+    padding: 12px 0 16px;
+  }
+  .header-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+  }
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #121212;
+    color: #fff;
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px 3px;
+    border-radius: 2px;
+  }
+  .live-pulse {
+    width: 8px; height: 8px;
+    background: #C70000;
+    border-radius: 50%;
+    animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .header-section {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  .blog-headline {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .blog-standfirst {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  /* ── HERO IMAGE ── */
+  .hero-image {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #121212;
+  }
+  .hero-image img {
+    width: 100%;
+    display: block;
+  }
+  .hero-caption {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    color: #707070;
+    padding: 6px 20px 12px;
+    background: #F6F6F6;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* ── PRETEXT INFO BANNER ── */
+  .pretext-banner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    background: rgba(5, 41, 98, 0.04);
+    border: 1px solid rgba(5, 41, 98, 0.12);
+    border-radius: 4px;
+    margin-top: 12px;
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    color: #052962;
+    line-height: 1.6;
+    display: none;
+  }
+  .pretext-banner.open { display: block; }
+  .pretext-banner code {
+    background: rgba(5, 41, 98, 0.08);
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-size: 11px;
+  }
+
+  /* ── KEY EVENTS BAR ── */
+  .key-events-bar {
+    max-width: 700px;
+    margin: 16px auto 0;
+    padding: 0 20px;
+  }
+  .key-events-toggle {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #C70000;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .key-events-toggle .arrow { transition: transform 0.2s; }
+  .key-events-toggle.open .arrow { transform: rotate(90deg); }
+  .key-events-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .key-events-list.open { max-height: 2000px; }
+  .ke-item {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dotted #DCDCDC;
+    cursor: pointer;
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+  }
+  .ke-item:hover { background: rgba(255, 229, 0, 0.08); }
+  .ke-time {
+    color: #C70000;
+    font-weight: 700;
+    flex-shrink: 0;
+    width: 42px;
+  }
+  .ke-title { color: #121212; }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    max-width: 700px;
+    margin: 16px auto 100px;
+    padding: 0 20px;
+  }
+
+  /* ── ENTRY ── */
+  .entry {
+    border-top: 1px solid #DCDCDC;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  }
+  .entry.settled { max-height: none !important; }
+  .entry-inner { padding: 12px 0 16px; position: relative; }
+  .entry.key-event .entry-inner {
+    border-left: 4px solid #FFE500;
+    padding-left: 12px;
+  }
+
+  .entry-timestamp {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    color: #C70000;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .entry-timestamp .date-part {
+    color: #707070;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .entry-title {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #121212;
+    margin-bottom: 6px;
+  }
+  .entry-body {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #333;
+  }
+  .entry-body p { margin-bottom: 10px; }
+  .entry-body p:last-child { margin-bottom: 0; }
+  .entry-body strong { color: #121212; }
+  .entry-body a { color: #C70000; text-decoration: underline; text-decoration-color: rgba(199,0,0,0.3); }
+
+  /* Shimmer (light theme) */
+  .shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.015) 40%, rgba(0,0,0,0.03) 50%, rgba(0,0,0,0.015) 60%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s ease infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .shimmer.fade-out { opacity: 0; transition: opacity 0.3s; }
+
+  /* Height tag (hidden by default) */
+  .height-tag {
+    position: absolute;
+    right: -55px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: monospace;
+    font-size: 10px;
+    color: #052962;
+    opacity: 0;
+    white-space: nowrap;
+  }
+  .show-metrics .height-tag { opacity: 0.5; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 56px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 600px;
+    width: calc(100% - 32px);
+    background: #fff;
+    border: 1px solid #DCDCDC;
+    border-left: 4px solid #C70000;
+    border-radius: 4px;
+    padding: 10px 14px;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    cursor: pointer;
+  }
+  .toast.visible { opacity: 1; pointer-events: auto; }
+  .toast-dot {
+    width: 8px; height: 8px;
+    background: #C70000;
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulse 1.5s ease infinite;
+  }
+  .toast-text {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #121212;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toast-jump {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #C70000;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .footer-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #F6F6F6;
+    border-top: 1px solid #DCDCDC;
+    padding: 8px 0;
+    z-index: 100;
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    color: #707070;
+  }
+  .footer-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stat-val {
+    font-weight: 700;
+    color: #121212;
+    font-family: monospace;
+    font-size: 13px;
+  }
+  .footer-btns {
+    display: flex;
+    gap: 3px;
+    margin-left: auto;
+  }
+  .footer-btns button {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 11px;
+    padding: 4px 10px;
+    border: 1px solid #DCDCDC;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: 400;
+  }
+  .footer-btns button:hover { background: #EDEDED; }
+  .footer-btns button.active {
+    background: #052962;
+    color: #fff;
+    border-color: #052962;
+  }
+  .footer-btns button.red {
+    color: #C70000;
+    border-color: #C70000;
+  }
+  .footer-btns button.red:hover { background: rgba(199,0,0,0.05); }
+</style>
+</head>
+<body>
+
+<div class="pillar-bar"></div>
+
+<header class="blog-header">
+  <div class="header-inner">
+    <div class="header-meta">
+      <span class="live-badge"><span class="live-pulse"></span> Live</span>
+      <span class="header-section">Middle East crisis live</span>
+    </div>
+    <h1 class="blog-headline">Israel expands invasion of southern Lebanon</h1>
+    <p class="blog-standfirst">War continues to escalate as Houthis confirm second wave of attacks on Israel and powerful explosions shake northern Tehran</p>
+  </div>
+</header>
+
+<div class="hero-image">
+  <img src="https://media.guim.co.uk/56a3c3c19137a7c06c03a85a280087f2ecf0ef58/434_0_4164_3333/1000.jpg" alt="People work to recover items from the site of a US-Israeli s">
+</div>
+<div class="hero-caption">People work to recover items from the site of a US-Israeli strike on a commercial district in Tehran, Iran, on Sunday. Follow for latest updates on the Middle East crisis – live. <span style="color:#999">Photograph: AFP/Getty</span></div>
+
+<div class="pretext-banner" id="infoPanel">
+  <strong>How Pretext powers this demo:</strong><br>
+  1. Slot height pre-measured via <code>prepare()</code> + <code>layout()</code> — no DOM element needed<br>
+  2. Scroll adjusted by exact pixel height — zero displacement when reading older updates<br>
+  3. Each update's text measured before insertion so the slot opens to the precise height
+</div>
+
+<div class="key-events-bar">
+  <button class="key-events-toggle" id="keToggle">
+    <span class="arrow">&#9654;</span> Key events <span id="keCount" style="font-weight:400;color:#707070"></span>
+  </button>
+  <div class="key-events-list" id="keList"></div>
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+<div class="toast" id="toast">
+  <span class="toast-dot"></span>
+  <span class="toast-text" id="toastText"></span>
+  <span class="toast-jump">View update &#8593;</span>
+</div>
+
+<div class="footer-bar">
+  <div class="footer-inner">
+    <span>Updates: <span class="stat-val" id="updateCount">0</span></span>
+    <span>Progress: <span class="stat-val" id="progressStat">0/61</span></span>
+    <span>Latest: <span class="stat-val" id="latestAgo">--</span></span>
+    <span>Pre-measured: <span class="stat-val" id="lastHeight">--</span></span>
+    <div class="footer-btns">
+      <button data-speed="60" class="active">60x</button>
+      <button data-speed="300">300x</button>
+      <button data-speed="1000">1000x</button>
+      <button data-speed="5000">5000x</button>
+      <button id="skipBtn" class="red">Skip &#8594;</button>
+      <button id="pauseBtn">Pause</button>
+      <button id="metricsBtn">Heights</button>
+      <button id="infoBtn">How it works</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { prepare, layout, prepareWithSegments } from 'https://esm.sh/@chenglou/pretext@0.0.3';
+
+const DATA = {"headline": "Israel expands invasion of southern Lebanon \u2013 as it happened", "standfirst": "This live blog has now closed. Our coverage of the US-Israel war on Iran and the wider crisis in the Middle East continues here", "heroUrl": "https://media.guim.co.uk/56a3c3c19137a7c06c03a85a280087f2ecf0ef58/434_0_4164_3333/1000.jpg", "heroCaption": "People work to recover items from the site of a US-Israeli strike on a commercial district in Tehran, Iran, on Sunday. Follow for latest updates on the Middle East crisis \u2013 live.", "entries": [{"pub": "2026-03-29T04:28:48Z", "title": "Opening summary", "html": "<p>Hello and welcome to our live coverage of events in the Middle East as the war enters its second month.</p> <p>The war only continues to escalate as Yemen\u2019s Iran-backed Houthis confirmed a second wave of attacks on Israel since joining the conflict on Saturday. They have vowed to continue strikes in the coming days, posing a threat not just to worsening regional security but also global trade.</p> <p>In Iran, two powerful explosions shook northern Tehran early on Sunday, an AFP journalist reported. The blasts occurred in the Iranian capital about 7.20am as air defences operated, but it was not yet clear what was targeted.</p> <p>Meanwhile, the US is reportedly preparing plans for ground operations in Iran. The <a href=\"https://www.theguardian.com/us-news/trump-administration\">Trump administration</a> has already deployed US Marines to the Middle East.</p> <p>Here\u2019s a quick recap of the latest:</p>", "text": "Hello and welcome to our live coverage of events in the Middle East as the war enters its second month. The war only continues to escalate as Yemen\u2019s Iran-backed Houthis confirmed a second wave of att"}, {"pub": "2026-03-29T04:47:03Z", "title": "Shipping helplines ring with alerts from seafarers trapped amid war", "html": "<p>Seafarers\u2019 helplines say they are overwhelmed with messages from crews stuck in the Gulf by the Middle East war, desperately seeking repatriation, compensation and onboard supplies.</p> <p>\u201cWriting to urgently inform you that our vessel is currently facing a critical situation regarding provisions and one crew health conditions,\u201d read an email from one seafarer on 24 March to the International Transport Workers\u2019 Federation (ITF)\u2019s Seafarer Support team.</p> <p>\u201cImmediate supply of food, drinking water, basic necessities is required to sustain the crew,\u201d said the message to the team\u2019s helpline.</p> <p>The ITF said it had received more than 1,000 emails and messages from seafarers stuck around the strait of Hormuz and the wider region since the war erupted with US-Israeli strikes on Iran on 28 February.</p>  ", "text": "Seafarers\u2019 helplines say they are overwhelmed with messages from crews stuck in the Gulf by the Middle East war, desperately seeking repatriation, compensation and onboard supplies. \u201cWriting to urgent"}, {"pub": "2026-03-29T05:04:18Z", "title": "", "html": "<p><strong>Iran Guards say strikes on Bahrain and UAE aluminium plants are retaliation for US-Israeli attacks</strong></p> <p>Iran\u2019s Revolutionary Guards says it launched missile and drone strikes on aluminium plants in Bahrain and the UAE over the weekend in retaliation for a US-Israeli attack on Iranian industrial infrastructure launched from bases in Gulf states.</p> <p>The IRGC said the strikes were targeting what they described as industries linked to the US military.</p> <p>Since the Middle East war erupted at the end of February, Bahrain and other Gulf countries have regularly been targeted by Iranian missile and drone strikes in retaliation for the US-Israeli campaign.</p> <p>In a statement carried by Iranian state broadcaster IRIB, the Guards said they hit an aluminium facility in the UAE and Aluminium Bahrain\u2019s main plant, calling both sites \u201cindustries affiliated with and connected to the US military and aerospace sectors in the region\u201d.</p>", "text": "Iran Guards say strikes on Bahrain and UAE aluminium plants are retaliation for US-Israeli attacks Iran\u2019s Revolutionary Guards says it launched missile and drone strikes on aluminium plants in Bahrain"}, {"pub": "2026-03-29T05:39:35Z", "title": "IDF says it has hit Iranian command centres and weapons sites", "html": "<p>The Israel Defense Forces (IDF) says it has temporary Iranian command centres and weapons production and storage sites in Terhan in a fresh wave of strikes.</p> <p>In a post on X, the IDF said the sites targeted included \u201cballistic missile production and storage facilities, aerial defense systems, and observation posts of the Iranian regime\u201d.</p> <p>According to the IDF, Iran had moved some command centres to temporary sites. \u201cSeveral temporary command centers were dismantled, including commanders who were operating within the HQ\u2019s,\u201d the IDF said in the post.</p>  ", "text": "The Israel Defense Forces (IDF) says it has temporary Iranian command centres and weapons production and storage sites in Terhan in a fresh wave of strikes. In a post on X, the IDF said the sites targ"}, {"pub": "2026-03-29T06:01:33Z", "title": "", "html": "<p><strong>If you are just catching up on what it means that Yemen\u2019s Houthi\u2019s have joined the war</strong>, you can read a piece from the Guardian\u2019s Julian Borger here.</p> <aside class=\"element element-rich-link element--thumbnail\"> <p> <span>Related: </span><a href=\"https://www.theguardian.com/world/2026/mar/28/houthi-forces-enter-iran-conflict-with-missile-attacks-on-israeli-military-sites\">Houthi forces enter Iran conflict with missile attacks on Israeli military sites</a> </p> </aside>", "text": "If you are just catching up on what it means that Yemen\u2019s Houthi\u2019s have joined the war, you can read a piece from the Guardian\u2019s Julian Borger here."}, {"pub": "2026-03-29T06:15:40Z", "title": "Five killed in US-Israeli strikes on Iran city near Hormuz strait, state media says", "html": "<p>US-Israeli strikes hit a quay at an Iranian port city on Sunday near the strategic strait of Hormuz, killing five people, Iranian state media reported.</p> <p>The official IRNA news agency reported the \u201cenemy carried out a criminal attack at the quay of Bandar Khamir, killing five people and injuring four others\u201d.</p> <p>A series of loud explosions was also heard on Sunday across the Iranian capital, an AFP journalist said. The blasts were heard in northern Tehran and smoke was seen rising from impacted areas.</p>", "text": "US-Israeli strikes hit a quay at an Iranian port city on Sunday near the strategic strait of Hormuz, killing five people, Iranian state media reported. The official IRNA news agency reported the \u201cenem"}, {"pub": "2026-03-29T06:19:10Z", "title": "Oman\u2019s foreign ministry condemns attacks on its territory", "html": "<p>Oman\u2019s foreign ministry said on Sunday that it condemns attacks on its territory, adding that no party has claimed responsibility.</p> <p>It said authorities were investigating the attacks\u2019 \u201csources and motives\u201d without providing further details.</p> <p>Oman said on Saturday that a worker was injured in a drone attack on the Gulf country\u2019s Salalah port and Danish container shipping group Maersk said later that it temporarily halted its operations at the port after Saturday\u2019s attack.</p>  ", "text": "Oman\u2019s foreign ministry said on Sunday that it condemns attacks on its territory, adding that no party has claimed responsibility. It said authorities were investigating the attacks\u2019 \u201csources and moti"}, {"pub": "2026-03-29T06:37:45Z", "title": "US base in Syria targeted by Iraq in repelled drone attack, assistant minister says", "html": "<p>Syria\u2019s assistant defence minister said Sunday that his country\u2019s forces had repelled a drone attack from neighbouring Iraq targeting one of Syria\u2019s last US military bases.</p> <p>\u201cEarlier today, the US base in Qasrak, located on our territory, was attacked by four drones launched from Iraqi territory,\u201d Sipan Hamo said on X, adding that \u201cthe drones were shot down without casualties\u201d.</p> <p>\u201cWe hold Iraq responsible and call upon it to prevent the recurrence of attacks that threaten our stability.\u201d</p> <p>The attack came a day after Syria\u2019s army said it repelled another drone attack from Iraq aimed at al-Tanf, a base in the southeast which used to house US forces.</p>    <p>Earlier this week, the Syrian military said another base in the north-east was also targeted by a missile attack from Iraq, with an Iraqi official saying a local armed group was behind it. Iraq has arrested four people in connection with that attack. </p>", "text": "Syria\u2019s assistant defence minister said Sunday that his country\u2019s forces had repelled a drone attack from neighbouring Iraq targeting one of Syria\u2019s last US military bases. \u201cEarlier today, the US base"}, {"pub": "2026-03-29T07:23:05Z", "title": "", "html": "<p>Kuwait has said its air defence systems intercepted four drones attacking the country this morning. </p> <p>In a statement posted to social media earlier, the Kuwait army said that \u201cany explosions that may be heard are the result of air defence systems intercepting hostile targets\u201d, without specifying who was behind the attacks.</p>", "text": "Kuwait has said its air defence systems intercepted four drones attacking the country this morning. In a statement posted to social media earlier, the Kuwait army said that \u201cany explosions that may be"}, {"pub": "2026-03-29T07:42:03Z", "title": "", "html": "<p>Iran\u2019s foreign minister, Abbas Araghchi, has condemned Israel\u2019s killing of three journalists in Lebanon on Saturday.</p> <p>On his Telegram, Araghchi said the killings amounted to \u201ctargeted assassination\u201d and \u201cflagrant violation of international law\u201d. He said they were a way of silencing \u201cthe voices of those who tell the truth\u201d.</p> <p>Ali Shoeib, from the Hezbollah-owned al-Manar television station, Fatima Ftouni and her brother and cameraman Mohammed Ftouni from the channel al-Mayadeen <a href=\"https://www.theguardian.com/world/2026/mar/28/lebanon-condemns-blatant-war-crime-israel-kills-three-journalists\">were killed in the Israeli airstrike targeting their car yesterday</a>.</p>    <p>Israel claimed the attack shortly afterwards, saying the target was Shoeib, whom it accused of being a Hezbollah \u201cterrorist\u201d, without providing any evidence to support its claim. It did not comment on the killing of Fatima or Mohamed Ftouni.</p>", "text": "Iran\u2019s foreign minister, Abbas Araghchi, has condemned Israel\u2019s killing of three journalists in Lebanon on Saturday. On his Telegram, Araghchi said the killings amounted to \u201ctargeted assassination\u201d an"}, {"pub": "2026-03-29T08:05:25Z", "title": "", "html": "<p>Qatari news channel Al Araby has said <a href=\"https://x.com/AlarabyTV/status/2038151842782196213\">in a post on X</a> that an Israeli missile had hit the building housing its office in the Iranian capital of Tehran, causing \u201cextensive damage and halting live broadcasts\u201d.</p>", "text": "Qatari news channel Al Araby has said in a post on X that an Israeli missile had hit the building housing its office in the Iranian capital of Tehran, causing \u201cextensive damage and halting live broadc"}, {"pub": "2026-03-29T08:26:32Z", "title": "", "html": "<p>Saudi Arabia\u2019s defence ministry said <a href=\"https://x.com/modgovksa/status/2038119749893202133\">in a statement shared to social media</a> about three hours ago that the country had intercepted and destroyed 10 drones in the previous few hours.</p>", "text": "Saudi Arabia\u2019s defence ministry said in a statement shared to social media about three hours ago that the country had intercepted and destroyed 10 drones in the previous few hours."}, {"pub": "2026-03-29T08:38:19Z", "title": "How likely is it that Donald Trump will order a ground invasion of Iran?", "html": "<p>Thousands of US marines aboard navy amphibious ships from the 31st and 11th expeditionary units have been deployed to the Middle East from Asia. </p> <p>Another 2,000-odd <a href=\"https://www.theguardian.com/world/2026/mar/24/middle-east-violence-trump-claims-very-good-talks-iran\">paratroopers from the 82nd Airborne</a> are also being sent to the theatre \u2013 they are tasked with deploying worldwide within 18 hours of notification and execute parachute assaults, including against a \u201cdefended airfield\u201d to prepare for further ground operations.</p>    <p>The secretary of state, Marco Rubio, repeated on Friday that the US believes it will be able to achieve its goals without boots on the ground, but when marines are in position next week, Trump could order an assault to either provide leverage to reopen the strait of Hormuz or to degrade Iran\u2019s ability to keep the waterway closed by force. </p>", "text": "Thousands of US marines aboard navy amphibious ships from the 31st and 11th expeditionary units have been deployed to the Middle East from Asia. Another 2,000-odd paratroopers from the 82nd Airborne a"}, {"pub": "2026-03-29T09:10:33Z", "title": "US secretly plotting ground attack despite message of diplomacy, Iran's parliament speaker says", "html": "<p>Iranian state media have published a message from Iranian parliament speaker <strong>Mohammad Bagher Ghalibaf</strong> marking 30 days since the start of the US-Israeli war.</p> <p>\u201cThe enemy openly sends a message of negotiation and secretly plans a ground attack,\u201d Ghalibaf, who has served as speaker of the parliament since 2020, wrote in his message carried by the Tasnim news agency.</p> <p>\u201cThe United States expresses its desires with a list of 15 points and pursues what it did not achieve in the war.\u201d</p> <p>\u201cWe are in a major world war, and we must prepare ourselves for the tortuous and difficult path ahead of us until we reach the summit,\u201d he added.</p> <p>Ghalibaf was previously an Islamic Revolutionary Guard Corps (IRGC) commander, police chief and mayor of Tehran. Washington reportedly has thought of him as a potential partner and he is reported to be Donald Trump\u2019s preferred choice for leader.</p>  ", "text": "Iranian state media have published a message from Iranian parliament speaker Mohammad Bagher Ghalibaf marking 30 days since the start of the US-Israeli war. \u201cThe enemy openly sends a message of negoti"}, {"pub": "2026-03-29T09:18:10Z", "title": "Iran\u2019s parliament speaker: the outsider seen by White House as possible partner", "html": "<p>Trying to appoint Mohammad Bagher Ghalibaf from Washington reveals either a misunderstanding of the Islamic Republic\u2019s multilayered political system or a determination to upend it: power in Iran historically lies with the supreme leader, and <a href=\"https://www.theguardian.com/world/2026/mar/08/ali-khameneis-son-mojtaba-chosen-as-irans-new-supreme-leader\">Mojtaba Khamenei</a> has been selected to that role by the Assembly of Experts.</p> <p>While it is true that Khamenei has not been seen since his election and is believed to be seriously injured, <a href=\"https://www.theguardian.com/world/iran\">Iran</a> insists he is the functioning decision-maker\u2026</p>", "text": "Trying to appoint Mohammad Bagher Ghalibaf from Washington reveals either a misunderstanding of the Islamic Republic\u2019s multilayered political system or a determination to upend it: power in Iran histo"}, {"pub": "2026-03-29T09:27:31Z", "title": "IDF says it has completed 'another wave' of airstrikes across Tehran", "html": "<p>The IDF said this morning that it had completed \u201canother wave\u201d of airstrikes across the Iranian capital of Tehran.</p> <p>Tehran was targeted with an intense wave of Israeli airstrikes yesterday that damaged residential neighbourhoods and reportedly struck a prestigious university.</p> <p>US-Israeli airstrikes have repeatedly hit the densely populated city throughout the war. </p> <p>Many civilians have been killed in the attacks, despite them framed as only targeting the infrastructure of the Iranian state and targets linked to the regime.</p>  ", "text": "The IDF said this morning that it had completed \u201canother wave\u201d of airstrikes across the Iranian capital of Tehran. Tehran was targeted with an intense wave of Israeli airstrikes yesterday that damaged"}, {"pub": "2026-03-29T09:49:29Z", "title": "", "html": "<p>A report by Human Rights Activists in Iran (HRA), Airwars and the Center for Civilians in Conflict (CIVIC) that was issued on Friday lays out the civilian toll of the US-Israeli war on Iran. You can read it in full <a href=\"https://www.hra-iran.org/wp-content/uploads/2026/03/FINAL-Civilian-Harm-in-Iran-after-One-Month-of-War.pdf\">here</a>:</p> <ul> <li><p>Between 28 February and 23 March, HRA recorded at least <strong>1,443 civilian deaths</strong>, including at least <strong>217 children</strong>, resulting from US and Israeli airstrikes in Iran. These figures represent verified minimums and are expected to rise.</p>", "text": "A report by Human Rights Activists in Iran (HRA), Airwars and the Center for Civilians in Conflict (CIVIC) that was issued on Friday lays out the civilian toll of the US-Israeli war on Iran. You can r"}, {"pub": "2026-03-29T10:17:54Z", "title": "Iranian forces are waiting for US troops to arrive to 'set them on fire', speaker says", "html": "<p>We have some more comments from the Iranian parliament speaker, Mohammad Bagher Ghalibaf, who has published a message marking 30 days since the start of the US-Israeli war on Iran (see post at <a href=\"https://www.theguardian.com/world/live/2026/mar/29/middle-east-crisis-live-explosions-tehran-yemen-houthis-iran-war-updates-trump-us-israel-strikes-lebanon?page=with%3Ablock-69c8e8988f084d6bedab6037#block-69c8e8988f084d6bedab6037\">10.10</a> for details).</p> <p>Iranian forces \u201care waiting for the arrival of American troops on the ground to set them on fire and punish their regional partners forever,\u201d Ghalibaf said.</p> <p>He added: \u201cOur firing continues. Our missiles are in place. Our determination and faith have increased.\u201d</p> <p>The comments came as the Saudi Arabian foreign minister is set to join his Egyptian, Pakistani and Turkish counterparts in Islamabad later today for talks aimed at reducing regional tensions.</p>", "text": "We have some more comments from the Iranian parliament speaker, Mohammad Bagher Ghalibaf, who has published a message marking 30 days since the start of the US-Israeli war on Iran (see post at 10.10 f"}, {"pub": "2026-03-29T10:45:10Z", "title": "", "html": "<p>The internet blackout in Iran has entered its 30th day, according to internet monitoring group NetBlocks. It said <a href=\"https://mastodon.social/@netblocks/116311287978783633\">in a post</a>:</p> <blockquote class=\"quoted\"> <p><em>Iran\u2019s internet blackout has now entered day 30 as the nationwide censorship measure continues into its fifth week after 696 hours.</em></p> <p><em>Metrics show that connectivity to the outside world remains at just 1% of ordinary levels.</em></p> </blockquote> <p>Those without access to Starlink or alternative ways to communicate \u2013 which are often expensive \u2013 are cut off, not only from the outside world but the blackout also severely curtails Iranian\u2019s ability to communicate with each other, making mobilisation, for example, much more difficult.</p>", "text": "The internet blackout in Iran has entered its 30th day, according to internet monitoring group NetBlocks. It said in a post: Iran\u2019s internet blackout has now entered day 30 as the nationwide censorshi"}, {"pub": "2026-03-29T11:01:46Z", "title": "Foreign ministers meet in Pakistan\u2019s capital as they try to reduce regional tensions", "html": "<p>Al Jazeera <a href=\"https://www.aljazeera.com/news/liveblog/2026/3/29/iran-war-live-houthis-attack-israel-anti-war-protesters-rally-in-tel-aviv\">is reporting</a> that Saudi Arabia\u2019s foreign minister has arrived in Islamabad, Pakistan\u2019s capital, for talks with his counterparts from Pakistan, Egypt and Turkey.</p> <p>The ministers will hold \u201cin-depth discussions on a range of issues, \u200bincluding efforts to de-escalate tensions in the region\u201d during the two-day talks, \u200bPakistan\u2019s foreign ministry said yesterday.</p>", "text": "Al Jazeera is reporting that Saudi Arabia\u2019s foreign minister has arrived in Islamabad, Pakistan\u2019s capital, for talks with his counterparts from Pakistan, Egypt and Turkey. The ministers will hold \u201cin-"}, {"pub": "2026-03-29T11:13:03Z", "title": "", "html": "<p>Here are some lines from an interesting <a href=\"https://www.theguardian.com/world/2026/mar/29/israeli-strikes-us-troop-buildup-pakistan-peacemaker-role-under-pressure\">analysis piece</a> by my colleague <a href=\"https://www.theguardian.com/profile/saeedshah\">Saeed Shah</a> about Pakistan\u2019s mediation role in the war:</p> <blockquote class=\"quoted\"> <p><em>Pakistan\u2019s diplomatic efforts intensified on Saturday, with the country\u2019s prime minister, Shehbaz Sharif, calling the Iranian president, Masoud Pezeshkian, and the announcement the foreign ministers of Turkey, Egypt, Saudi Arabia and Pakistan will hold talks in Islamabad on Sunday and Monday about how to end the war.</em></p>", "text": "Here are some lines from an interesting analysis piece by my colleague Saeed Shah about Pakistan\u2019s mediation role in the war: Pakistan\u2019s diplomatic efforts intensified on Saturday, with the country\u2019s "}, {"pub": "2026-03-29T11:37:17Z", "title": "", "html": "<p><a href=\"https://x.com/AnwarGargash/status/2038205532255953326\">In a post on X</a>, Anwar Gargash, the diplomatic adviser to the UAE\u2019s president, wrote:</p> <blockquote class=\"quoted\"> <p><em>Any political solution addressing the Iranian aggression against the Arab Gulf states must include clear guarantees to prevent future violations, uphold the principle of non-aggression, and mandate <strong>Iranian reparations for targeting civilian and vital facilities as well as civilians</strong>.</em></p> <p><em>Iran deceived its neighbors about its intentions before the war and revealed premeditated aggression despite their sincere efforts to avoid it, making these two paths essential in confronting a regime that <strong>has become the primary threat to the security of the Arab Gulf</strong>.</em></p> </blockquote>", "text": "In a post on X, Anwar Gargash, the diplomatic adviser to the UAE\u2019s president, wrote: Any political solution addressing the Iranian aggression against the Arab Gulf states must include clear guarantees"}, {"pub": "2026-03-29T12:18:37Z", "title": "", "html": "<p>Qatari news channel Al Araby has condemned the strike on its Tehran office building (<a href=\"https://www.theguardian.com/world/live/2026/mar/29/middle-east-crisis-live-explosions-tehran-yemen-houthis-iran-war-updates-trump-us-israel-strikes-lebanon?page=with%3Ablock-69c8d94e8f08a9060e5ec645#block-69c8d94e8f08a9060e5ec645\">see earlier post</a>)</p> <p>The channel said in a statement to AFP that it \u201ccondemns this attack on a civilian commercial building and affirms that endangering journalists or considering them targets runs counter to international law\u201d.</p> <p>It added that, according to the Iranian Red Crescent 10 people, had been injured in the Sunday morning strike.</p>  ", "text": "Qatari news channel Al Araby has condemned the strike on its Tehran office building (see earlier post) The channel said in a statement to AFP that it \u201ccondemns this attack on a civilian commercial bui"}, {"pub": "2026-03-29T12:31:08Z", "title": "", "html": "<p><strong>Two India-bound liquefied petroleum gas tankers</strong> carrying about 94,000 metric tons of the cooking gas have safely passed through the <strong>strait of Hormuz</strong> and are heading towards India, its government has said.</p> <p>The carriers BW Tyr and BW Elm are expected to arrive in Mumbai on 31 March and New Mangalore on 1 April respectively, the petroleum ministry said in a statement.</p> <p>The war has all but halted shipping through the strait, but Iran has said <strong>\u201cnon-hostile vessels\u201d</strong> may use the waterway if they coordinate with Iranian authorities.</p> <p>Reuters reports that the ships are the latest Indian-flagged vessels to make it through. Four LPG tankers have already completed the crossing, while three more are still in the western section of the strait, LSEG ship tracking data showed on Friday.</p>", "text": "Two India-bound liquefied petroleum gas tankers carrying about 94,000 metric tons of the cooking gas have safely passed through the strait of Hormuz and are heading towards India, its government has s"}, {"pub": "2026-03-29T12:42:10Z", "title": "", "html": "<p>The funeral has taken place in Lebanon for <a href=\"https://www.theguardian.com/world/2026/mar/28/lebanon-condemns-blatant-war-crime-israel-kills-three-journalists\">three journalists killed by an Israeli strike on Saturday</a>, an attack which Beirut called a \u201cblatant crime\u201d.</p> <p>Ali Shoeib, a veteran correspondent for Hezbollah\u2019s Al Manar TV, Fatima Ftouni of the pro-Hezbollah Al Mayadeen channel and her brother, cameraman Mohammad Ftouni, were all killed when their vehicle was hit in Jezzine in southern Lebanon.</p> <p>Israel\u2019s military in a statement alleged that Shoeib \u201coperated within the Hezbollah terrorist organisation under the guise of a journalist for the Al Manar network\u201d, without providing evidence.</p> <p>It did not comment on the deaths of Ftouni and her brother.</p>  ", "text": "The funeral has taken place in Lebanon for three journalists killed by an Israeli strike on Saturday, an attack which Beirut called a \u201cblatant crime\u201d. Ali Shoeib, a veteran correspondent for Hezbollah"}, {"pub": "2026-03-29T13:21:49Z", "title": "Summary of the day so far...", "html": "<p>It has just gone past 16:50pm in Tehran, and 16:20pm in Tel Aviv and Beirut. Here is a quick recap of events:</p> <ul> <li><p>Iran\u2019s parliament speaker, Mohammad Bagher Ghalibaf, said Iranian forces \u201care waiting for the arrival of American troops on the ground to set them on fire\u201d.</p></li> <li><p>Ghalibaf said the US is secretly plotting a ground attack despite a message of diplomacy coming out of the White House.</p></li> <li><p>The Pentagon is reportedly preparing for weeks of possible \u201cground operations\u201d in Iran, as thousands of US soldiers and marines arrive in the Middle East.</p></li> <li><p>Diplomatic talks in Islamabad between the foreign ministers of Egypt, Turkey, Saudi Arabia and Pakistan \u2013 which are aimed at de-escalating regional tensions -have begun.</p></li> <li><p>The talks, however, do not appear to include any American or Iranian representatives, casting doubt on persistent US claims of diplomatic progress.</p>", "text": "It has just gone past 16:50pm in Tehran, and 16:20pm in Tel Aviv and Beirut. Here is a quick recap of events: Iran\u2019s parliament speaker, Mohammad Bagher Ghalibaf, said Iranian forces \u201care waiting for "}, {"pub": "2026-03-29T13:49:36Z", "title": "", "html": "<p>The Tasnim news agency is reporting that law enforcement officials have arrested 35 people in the western Iranian province of Lorestan. </p> <p>Sixteen people were reportedly arrested on charges of illegally filming sensitive areas, such as military sites, and collaborating with so-called \u201chostile media networks\u201d, with 19 others detained on \u201ccharges of spreading rumours, creating an unsafe psychological environment among citizens and spreading false news\u201d. </p> <p>Iranian civilians have faced intensified domestic repression since the US-Israeli war was launched on 28 February, including expanded arbitrary arrests and restrictive security controls, according to Human Rights Activists in Iran. </p>", "text": "The Tasnim news agency is reporting that law enforcement officials have arrested 35 people in the western Iranian province of Lorestan. Sixteen people were reportedly arrested on charges of illegally "}, {"pub": "2026-03-29T14:10:18Z", "title": "", "html": "<p>The US has only destroyed about a third of Iran\u2019s missile and drone arsenal after a month of its war against Iran which aimed to degrade the country\u2019s ballistic missile capabilities, according to a report by Reuters.</p> <p>About a third of Tehran\u2019s missiles have been destroyed, and another third was likely to be damaged or buried in underground tunnels and bunkers, the report suggested. A similar assessment was made about the country\u2019s drone arsenal.</p> <p>The report, based on five people familiar with US intelligence, suggests that while most of Iran\u2019s missiles are immediately inaccessible, the country still has a sizeable stockpile.</p> <p>That contradicts Donald Trump\u2019s statement on Thursday that Tehran had \u201cvery few rockets left\u201d and statements from other US officials that the war has eliminated its ballistic missile capabilities. You can read more in this story here:</p>", "text": "The US has only destroyed about a third of Iran\u2019s missile and drone arsenal after a month of its war against Iran which aimed to degrade the country\u2019s ballistic missile capabilities, according to a re"}, {"pub": "2026-03-29T14:34:07Z", "title": "", "html": "<p>Pakistan\u2019s foreign minister Ishaq Dar said in a post on X that Iran had agreed to allow 20 more Pakistani-flagged ships through the strait of Hormuz, the vital shipping route which <a href=\"https://www.theguardian.com/world/iran\">Iran</a> is effectively blocking as leverage against the US (although some ships from \u201cfriendly\u201d countries \u2013 such as China and Thailand \u2013 have been allowed through with Tehran\u2019s permission). </p> <p>\u201cTwo ships will cross the strait daily,\u201d Dar said. \u201cThis is a welcome and constructive gesture by Iran and deserves appreciation. It is a harbinger of peace and will help usher stability in the region.\u201d</p> <p>The UK has in recent days <a href=\"https://www.theguardian.com/world/2026/mar/24/uk-offers-to-host-international-security-summit-on-reopening-strait-of-hormuz\">offered to host an international security summit</a> to draw up a \u201cviable, collective plan\u201d to reopen the strait of Hormuz as economic fallout from the US-Israeli war on Iran continues.</p>", "text": "Pakistan\u2019s foreign minister Ishaq Dar said in a post on X that Iran had agreed to allow 20 more Pakistani-flagged ships through the strait of Hormuz, the vital shipping route which Iran is effectively"}, {"pub": "2026-03-29T14:58:04Z", "title": "", "html": "<p>Bahrain has said it is imposing a ban on \u201cmaritime movement\u201d for seafarers using fishing and \u201cleisure\u201d vessels between the hours of 18:00 and 04:00 local time until further notice. <a href=\"https://www.policemc.gov.bh/en/news/77453/\">In a statement</a>, the country\u2019s interior ministry said:</p> <blockquote class=\"quoted\"> <p><em>In the interest of safeguarding seafarers amid the blatant Iranian aggression against the Kingdom of Bahrain, using missiles and drones, and the serious risks this poses to the safety of citizens and residents, the interior ministry announced a ban on maritime movement for seafarers using fishing and leisure vessels, as part of the measures taken to protect Bahrain\u2019s coasts. </em></p>", "text": "Bahrain has said it is imposing a ban on \u201cmaritime movement\u201d for seafarers using fishing and \u201cleisure\u201d vessels between the hours of 18:00 and 04:00 local time until further notice. In a statement, the"}, {"pub": "2026-03-29T15:16:02Z", "title": "Kuwait says Iranian attack injured 10 military personnel", "html": "<p>Ten <strong>Kuwaiti</strong> military personnel were injured in an <strong>Iranian</strong> missile attack on a military camp in the Gulf country, the Kuwaiti army said on Sunday, without giving a location.</p> <p>The camp sustained material damage, the army said in a <a href=\"https://x.com/KuwaitArmyGHQ/status/2038266252154589653\">post</a> on X, adding that Kuwait had dealt with 14 ballistic missiles and 12 drones over the past 24 hours.</p>", "text": "Ten Kuwaiti military personnel were injured in an Iranian missile attack on a military camp in the Gulf country, the Kuwaiti army said on Sunday, without giving a location. The camp sustained material"}, {"pub": "2026-03-29T15:34:38Z", "title": "", "html": "<p>Fire and rescue teams have been working to seal and contain damaged chemical storage units after a huge blaze broke out and led to fears of a hazardous materials leak at a factory at the <strong>Neot Hovav industrial complex</strong> in <strong>Israel</strong>.</p> <p>The IDF said the fire may have been caused by \u201ca weapon fragment or interceptor fragment\u201d.</p> <p>Footage and images showed fires burning and plumes of thick black smoke rising from the site, which houses more than 30 factories belonging to different companies and is located six miles south of the city of Beersheba.</p> <p>Israel\u2019s fire and rescue service said it was working to \u201cprevent an explosion or additional leaks\u201d and warned the public not to approach the area due to the \u201cpresence of hazardous materials\u201d.</p> <p>It urged nearby residents to lock themselves in their homes, close windows and vents, and follow the instructions of the security and rescue forces.</p>", "text": "Fire and rescue teams have been working to seal and contain damaged chemical storage units after a huge blaze broke out and led to fears of a hazardous materials leak at a factory at the Neot Hovav in"}, {"pub": "2026-03-29T15:52:30Z", "title": "Iran supreme leader 'thanks Iraqi people for their support', state media reports", "html": "<p><strong>Iran</strong>\u2019s supreme leader <strong>Mojtaba Khamenei</strong> has thanked the <strong>Iraqi</strong> people and religious leadership for their support of Iran \u201cin the face of aggression\u201d, Iran\u2019s state media reported on Sunday, without saying how this message was conveyed.</p> <p>More than three weeks on from his appointment as supreme leader, Khamenei has still not been seen or heard from in public since he was injured in the US-Israeli airstrike that killed his father, the late ayatollah <strong>Ali Khamenei</strong>, his wife and son on the first day of the war. </p> <p>Several written statements that have been attributed to Khamenei have been delivered via state media, fuelling speculation about the extent of his injuries. Days ago, <strong>Donald Trump</strong> claimed that the new supreme leader is \u201ceither dead or in very bad shape, because no one has heard from him\u201d.</p>  ", "text": "Iran\u2019s supreme leader Mojtaba Khamenei has thanked the Iraqi people and religious leadership for their support of Iran \u201cin the face of aggression\u201d, Iran\u2019s state media reported on Sunday, without sayin"}, {"pub": "2026-03-29T16:08:45Z", "title": "Netanyahu orders expansion of invasion of southern Lebanon", "html": "<p><strong>\u200cIsrael</strong>\u2019s prime minister <strong>\u2060Benjamin Netanyahu</strong> \u2060has announced an expansion of his invasion of southern Lebanon, saying that he has instructed the military \u2060to further expand the so-called \u201cbuffer \u2060zone\u201d and vowing to fundamentally change the security situation there.</p> <p>\u201c<strong>I have just \u200cinstructed to further expand the existing security buffer zone. We are determined to fundamentally change the situation in the north</strong>,\u201d \u2060Netanyahu said in a \u2060video statement from the Northern Command.</p> <p>He said the decision is aimed strengthening Israel\u2019s security posture along \u2060the northern \u2060frontier during ongoing tensions along Israel\u2019s northern border, where cross-border hostilities \u200chave raised fears of a broader regional escalation.</p>  ", "text": "\u200cIsrael\u2019s prime minister \u2060Benjamin Netanyahu \u2060has announced an expansion of his invasion of southern Lebanon, saying that he has instructed the military \u2060to further expand the so-called \u201cbuffer \u2060zone\u201d"}, {"pub": "2026-03-29T16:22:59Z", "title": "Iran envoy reportedly refuses to leave Lebanon despite expulsion", "html": "<p><strong>Iran</strong>\u2019s ambassador will not leave <strong>Lebanon</strong> despite being declared persona non grata and ordered to leave the country by Sunday, an Iranian diplomatic source has told Agence France-Presse.</p> <p>\u201cThe ambassador will not leave Lebanon in accordance with the wishes of the <strong>speaker of parliament Nabih Berri</strong> and of <strong>Hezbollah</strong>,\u201d the unnamed source said.</p> <p>Hezbollah has denounced the decision while Berri\u2019s Amal party joined Hezbollah ministers in boycotting a cabinet session this week in protest at the order to expel <strong>Mohammad Reza Sheibani</strong>.</p> <p>The foreign ministry this week gave Tehran\u2019s envoy until Sunday to leave in the latest unprecedented step by Lebanese authorities since a fresh conflict erupted on 2 March between Israel and Hezbollah.</p> <p>The foreign ministry accused him of making statements \u201cinterfering in Lebanon\u2019s internal politics\u201d.</p>", "text": "Iran\u2019s ambassador will not leave Lebanon despite being declared persona non grata and ordered to leave the country by Sunday, an Iranian diplomatic source has told Agence France-Presse. \u201cThe ambassado"}, {"pub": "2026-03-29T17:05:44Z", "title": "", "html": "<p><strong>Pakistan</strong>, <strong>Saudi Arabia</strong>, <strong>Turkey</strong> and <strong>Egypt</strong> discussed \u201cpossible ways to bring an early and permanent end to the war\u201d in the Middle East on Sunday, Pakistan\u2019s foreign minister <strong>Ishaq Dar</strong> has said.</p> <p>The four nations held joint talks to seek a de-escalation in the US-Israeli war on Iran in Islamabad.</p> <p>In a video recorded statement, Dar said all sides had expressed confidence in Pakistan\u2019s facilitation and that <strong>China</strong> <strong>\u201cfully supports\u201d the initiative to host the potential US-Iran talks in Islamabad</strong>.</p>", "text": "Pakistan, Saudi Arabia, Turkey and Egypt discussed \u201cpossible ways to bring an early and permanent end to the war\u201d in the Middle East on Sunday, Pakistan\u2019s foreign minister Ishaq Dar has said. The four"}, {"pub": "2026-03-29T17:33:00Z", "title": "", "html": "<p>We\u2019re now getting more on what was discussed in Islamabad as <strong>Pakistan</strong> hosted talks with <strong>Turkey</strong>, <strong>Egypt</strong> and <strong>Saudi Arabia</strong> on Sunday as part of its efforts to broker an end to the Iran war.</p> <p><strong>Initial discussions focused on proposals to reopen the critical strait of Hormuz to shipping</strong>, sources familiar with the matter have told Reuters, some of which have already been floated to Washington.</p> <p>A source from Pakistan said proposals, including from Egypt, had been forwarded to the White House before Sunday\u2019s meeting and that they included <strong>Suez Canal-style fee structures</strong>.</p>", "text": "We\u2019re now getting more on what was discussed in Islamabad as Pakistan hosted talks with Turkey, Egypt and Saudi Arabia on Sunday as part of its efforts to broker an end to the Iran war. Initial discus"}, {"pub": "2026-03-29T17:48:25Z", "title": "", "html": "<p><strong>A medical warehouse in southern Lebanon was destroyed</strong> <strong>amid Israel\u2019s ongoing offensive</strong>, the World Health Organisation\u2019s director-general has said.</p> <p><strong>Tedros Adhanom Ghebreyesus</strong> released a statement on social media saying that Israel\u2019s expanding military operations in southern Lebanon also resulted in the death of \u201cyet another health worker today\u201d.</p> <p>\u201cA paramedic was killed in a strike on an ambulance in Bint Jbeil,\u201d he added. \u201cAdditionally, a medical warehouse in the same city was destroyed in an attack.\u201d</p> <p>Prior to today\u2019s strikes, Ghebreyesus said the WHO has verified that <strong>51 Lebanese health workers have been killed since 2 March, including nine paramedics yesterday alone</strong>.</p> <p>He continued:</p> <blockquote class=\"quoted\"> <p><em>This cannot become the norm. Health workers are safeguarded under international humanitarian law and should not be targeted. Peace is the best medicine.</em></p>", "text": "A medical warehouse in southern Lebanon was destroyed amid Israel\u2019s ongoing offensive, the World Health Organisation\u2019s director-general has said. Tedros Adhanom Ghebreyesus released a statement on soc"}, {"pub": "2026-03-29T18:02:14Z", "title": "Pope seems to rebuke Trump in remarks about leaders with \u2018hands full of blood\u2019", "html": "<p><strong>Pope Leo</strong> has said God ignores the prayers of leaders who wage war and have \u201chands full of blood\u201d, in an apparent rebuke to <strong>the Trump administration</strong>.</p> <p>The pontiff made the comments on Sunday as thousands of US troops arrived in the Middle East and days after the US defence secretary, <strong>Pete Hegseth</strong>, prayed for <a href=\"https://www.theguardian.com/us-news/2026/mar/26/hegseth-prayer-violence-pentagon\">violence against enemies</a> who deserved \u201cno mercy\u201d.</p> <p>During a Palm Sunday mass in St Peter\u2019s Square, the pope said the conflict between the <strong>US</strong>, <strong>Israel</strong> and <strong>Iran</strong> was \u201catrocious\u201d and that Jesus could not be used to justify war.</p>", "text": "Pope Leo has said God ignores the prayers of leaders who wage war and have \u201chands full of blood\u201d, in an apparent rebuke to the Trump administration. The pontiff made the comments on Sunday as thousand"}, {"pub": "2026-03-29T18:17:31Z", "title": "", "html": "<p><strong>Qatar</strong> was targeted by a \u201cnumber of drones launched from Iran\u201d earlier today, the Qatari ministry of defence has said.</p> <p>All drones were \u201csuccessfully intercepted\u201d, the ministry added.</p> <p>Earlier, the <strong>US</strong> embassy in <strong>Doha</strong> announced it was \u201cconducting <strong>reduced operations</strong> with its remaining emergency personnel\u201d.</p> <p>It urged all American citizens in Qatar to \u201c<strong>remain vigilant and be prepared to duck and cover</strong> in a secure location if the Qatari authorities issue an alert\u201d.</p>", "text": "Qatar was targeted by a \u201cnumber of drones launched from Iran\u201d earlier today, the Qatari ministry of defence has said. All drones were \u201csuccessfully intercepted\u201d, the ministry added. Earlier, the US em"}, {"pub": "2026-03-29T18:34:17Z", "title": "", "html": "<p>The European council\u2019s president has reiterated the EU\u2019s solidarity with <strong>Gulf</strong> countries targeted by ongoing Iranian attacks, as he called on all parties to \u201cde-escalate and give diplomacy a chance\u201d.</p> <p>\u201cThe <strong>EU</strong> stands in solidarity with the Gulf cooperation council countries in the face of continued Iranian air strikes and drone attacks targeting civilians and infrastructure in the region,\u201d <strong>Ant\u00f3nio Costa</strong> wrote on X.</p> <blockquote class=\"quoted\"> <p><em>These attacks must stop immediately.</em></p> </blockquote> <p>Costa held a call with <strong>UAE </strong>president<strong> </strong>sheikh <strong>Mohamed bin Zayed Al Nahyan </strong>today. During the call, he reiterated \u201cthat the EU stands by the United Arab Emirates, which has been among the hardest hit\u201d. </p> <p>\u201cThe EU continues to urge all parties to de-escalate and give diplomacy a chance, in the interest of security and stability in the Middle East,\u201d he added.</p>", "text": "The European council\u2019s president has reiterated the EU\u2019s solidarity with Gulf countries targeted by ongoing Iranian attacks, as he called on all parties to \u201cde-escalate and give diplomacy a chance\u201d. \u201c"}, {"pub": "2026-03-29T18:53:10Z", "title": "Pakistan says it is set to host US and Iran talks 'in coming days'", "html": "<p><strong>Pakistan</strong>\u2019s foreign minister has said his country will soon host talks between the <strong>US</strong> and <strong>Iran</strong> \u2013 though there was no indication of whether the talks would be direct or indirect, and the two sides have yet to comment.</p> <p>Speaking after top diplomats from Turkey, Egypt and Saudi Arabia met in Islamabad to discuss how to end the war, <strong>Ishaq Dar</strong> said that <strong>\u201cPakistan is very happy that both Iran and the US have expressed their confidence in Pakistan\u2019s facilitation\u201d of the talks, which he said will happen in the \u201ccoming days\u201d</strong>.</p> <p>He added that foreign ministers from Turkey, Egypt and Saudi Arabia have backed Islamabad\u2019s peace efforts. They are set to meet again on Monday.</p>", "text": "Pakistan\u2019s foreign minister has said his country will soon host talks between the US and Iran \u2013 though there was no indication of whether the talks would be direct or indirect, and the two sides have "}, {"pub": "2026-03-29T19:34:38Z", "title": "IDF launches fresh strikes across Tehran", "html": "<p>The <strong>Israeli</strong> military said it is currently carrying out strikes on what it called targets belonging to the Iranian regime across <strong>Tehran</strong>.</p> <p>In a brief statement, the <strong>IDF </strong>said its forces are \u201ccurrently striking Iranian terror regime targets across Tehran\u201d, without providing further details on the locations targted or the scale of the operation.</p> <p>It comes after <strong>Iran</strong>\u2019s energy minister said that attacks on \u201celectricity infrastructure\u201d in Tehran, the wider Tehran Province and Alborz Province earlier caused power to be cut off.</p> <p><strong>Mostafa Rajabi Mashhadi</strong> said on state TV that \u201cshrapnel struck one of the electricity pylons at the entrance to the city of Karaj\u201d in Alborz Province, causing the power losses.</p> <p>Iran\u2019s Fars news agency has since reported that electricity has been restored to most areas of the capital and Karaj.</p>", "text": "The Israeli military said it is currently carrying out strikes on what it called targets belonging to the Iranian regime across Tehran. In a brief statement, the IDF said its forces are \u201ccurrently str"}, {"pub": "2026-03-29T19:52:24Z", "title": "IAEA says Iran's heavy-water production plant no longer operational after Israeli attack", "html": "<p>The <strong>International Atomic Energy Agency</strong> (IAEA) has confirmed that <strong>Iran</strong>\u2019s heavy-water production plant at <strong>Khondab</strong>, which <strong>Israel</strong> <a href=\"https://www.theguardian.com/world/live/2026/mar/27/iran-war-live-updates-trump-negotiations-bombing-hormuz-energy-oil-prices-middle-east?CMP=share_btn_url&amp;page=with%3Ablock-69c6c6358f086b26b5ba176d#block-69c6c6358f086b26b5ba176d\">attacked</a> on 27 March, has \u201csustained severe damage and is no longer operational\u201d.</p> <p>In a post on X, <strong>the IAEA added that the Khondab Heavy Water Research Reactor</strong> <strong>\u201ccontains no declared nuclear material\u201d</strong>. The Israeli military had described the site as a \u201ckey plutonium production site for nuclear weapons\u201d when it bombed the facility on Friday.</p>", "text": "The International Atomic Energy Agency (IAEA) has confirmed that Iran\u2019s heavy-water production plant at Khondab, which Israel attacked on 27 March, has \u201csustained severe damage and is no longer operat"}, {"pub": "2026-03-29T20:00:14Z", "title": "", "html": "<p>For Christians, Palm Sunday is the start of a holy week that marks Christ\u2019s arrival in Jerusalem days before his crucifixion and resurrection.</p> <p>On Sunday morning, <strong>Israeli</strong> police prevented <strong>Cardinal Pierbattista Pizzaballa</strong>, an archbishop with Catholic jurisdiction across <strong>Israel</strong> and <strong>the Palestinian territories</strong>, from entering the <strong>Church of the Holy Sepulchre</strong> in <strong>Jerusalem</strong> to conduct mass.</p>", "text": "For Christians, Palm Sunday is the start of a holy week that marks Christ\u2019s arrival in Jerusalem days before his crucifixion and resurrection. On Sunday morning, Israeli police prevented Cardinal Pier"}, {"pub": "2026-03-29T21:01:50Z", "title": "The day so far", "html": "<ul> <li><p><strong>Benjamin Netanyahu announced an expansion</strong> <strong>of Israel\u2019s invasion of southern Lebanon</strong> <strong>as his forces target Hezbollah.</strong> \u201cI have just \u200cinstructed to further expand the existing security buffer zone. We are determined to fundamentally change the situation in the north,\u201d \u2060the Israeli PM said in a \u2060video statement from the Northern Command. Israeli forces are currently occupying the area south of the Litani River, and its destruction of key bridges connecting to the rest of Lebanon and forced displacement of residents have stoked fears of a protracted occupation.</p></li> <li><p><strong>Pakistan will soon host talks between the US and Iran, its foreign minister said</strong>, as top diplomats from Pakistan, Saudi Arabia, Turkey and Egypt met in Islamabad to discuss ways to de-escalate the war. Neither Washington nor Tehran have yet commented.</p>", "text": "Benjamin Netanyahu announced an expansion of Israel\u2019s invasion of southern Lebanon as his forces target Hezbollah. \u201cI have just \u200cinstructed to further expand the existing security buffer zone. We are "}, {"pub": "2026-03-29T21:32:01Z", "title": "Israeli strike on ambulance kills another paramedic in Lebanon, WHO says", "html": "<p><strong>Tedros Adhanom Ghebreyesus</strong>, the director-general of the <strong>World Health Organization</strong> (WHO) has said another paramedic was killed in an Israeli strike on an ambulance in southern Lebanon on Sunday, as Israel <a href=\"https://www.theguardian.com/world/live/2026/mar/29/middle-east-crisis-live-explosions-tehran-yemen-houthis-iran-war-updates-trump-us-israel-strikes-lebanon?filterKeyEvents=false&amp;page=with%3Ablock-69c94d508f086b26b5ba2435#block-69c94d508f086b26b5ba2435\">expands its invasion</a> of the country.</p> <p>The strike also destroyed a medical warehouse in the same city, he said.</p>", "text": "Tedros Adhanom Ghebreyesus, the director-general of the World Health Organization (WHO) has said another paramedic was killed in an Israeli strike on an ambulance in southern Lebanon on Sunday, as Isr"}, {"pub": "2026-03-29T22:21:21Z", "title": "Starmer to host business leaders for Middle East war talks", "html": "<p><strong>Keir Starmer will gather industry leaders in Downing Street on Monday to address the impact of the Iran war</strong>, the British prime minister\u2019s office said.</p> <p>Starmer expected to meet senior representatives from the energy, shipping and financial services industries amid warnings the UK could suffer serious economic damage as a result of the conflict, PA Media reports.</p> <p>Discussion is expected to focus on Iran\u2019s ongoing blockade of the vital strait of Hormuz, which has choked oil and gas shipments and supplies of other products such as fertiliser.</p> <p>The meeting will also hear an update on the situation in the region from Maj Gen <strong>Richard Cantrill</strong>, the UK\u2019s maritime operations commander.</p> <p>It comes after the Royal Navy announced it was fitting the transport ship RFA Lyme Bay with mine-hunting drones, understood to be a move intended to provide ministers with options for securing the strait once the situation stabilises.</p>", "text": "Keir Starmer will gather industry leaders in Downing Street on Monday to address the impact of the Iran war, the British prime minister\u2019s office said. Starmer expected to meet senior representatives f"}, {"pub": "2026-03-29T22:32:44Z", "title": "Israel says it has intercepted two drones fired from Yemen", "html": "<p><strong>The Israeli air force has intercepted two unmanned aerial vehicles launched from Yemen</strong>, the IDF has <a href=\"https://x.com/idfonline/status/2038381168307867899\">posted online</a>.</p> <p>The interceptions occurred over the past hour, it said.</p> <p>Yemen\u2019s Iran-backed Houthis entered the Middle East war for the first time on Saturday, with the Iran-allied group saying they had fired a salvo of ballistic missiles at Israeli military sites, opening a new front in the conflict.</p> <p>They added that the attacks would continue until aggression ceased on \u201call fronts\u201d, indicating against Iran and its proxies such as Hezbollah.</p>", "text": "The Israeli air force has intercepted two unmanned aerial vehicles launched from Yemen, the IDF has posted online. The interceptions occurred over the past hour, it said. Yemen\u2019s Iran-backed Houthis e"}, {"pub": "2026-03-29T22:51:44Z", "title": "UN peacekeeper killed and another critically injured in Lebanon", "html": "<p><strong>The UN peacekeeping mission in Lebanon (Unifil) said a peacekeeper was killed when a projectile exploded at one of its positions near the southern Lebanese village of Adchit al-Qusayr on Sunday</strong>.</p> <p>Another peacekeeper was critically injured, it said early on Monday,</p> <p>\u201cWe do not know the origin of the projectile. We have launched an investigation to determine all of the circumstances,\u201d Unifil added in the statement.</p> <p>Unifil is stationed in southern Lebanon to monitor hostilities along the demarcation line with Israel \u2013 an area that is at the heart of clashes between Israeli troops and Iran-backed Hezbollah fighters, Reuters reports.</p>    <p>The mission, which will be halted at the end of 2026, has been sporadically caught in the crosshairs of both Israel and Hezbollah over the past couple of years. Recent incidents underscored the risks.</p>", "text": "The UN peacekeeping mission in Lebanon (Unifil) said a peacekeeper was killed when a projectile exploded at one of its positions near the southern Lebanese village of Adchit al-Qusayr on Sunday. Anoth"}, {"pub": "2026-03-29T23:06:30Z", "title": "Oil tops $100 a barrel again", "html": "<p><strong>The price of the main US benchmark for oil rose over 3% on Monday to once again pass $100 a barrel, while Brent climbed above $115</strong> amid no end in sight to the Middle East war.</p> <p>A barrel of West Texas Intermediate \u2013 the US benchmark \u2013 for May delivery rose 3.50% to $103.13 just minutes after Asian markets opened, AFP is reporting.</p> <p>A barrel of North Sea Brent, meanwhile, rose 2.98% to $115.93.</p>", "text": "The price of the main US benchmark for oil rose over 3% on Monday to once again pass $100 a barrel, while Brent climbed above $115 amid no end in sight to the Middle East war. A barrel of West Texas I"}, {"pub": "2026-03-29T23:28:12Z", "title": "", "html": "<p><strong>Australia\u2019s share market has opened sharply lower this morning</strong> as fears of a prolonged Middle East conflict ignite oil prices and trigger a bout of global inflation.</p> <p>The Australian benchmark S&amp;P/ASX 200 dropped 1% in early trading to hover near the 8,430 point mark. The index is down more than 8% from levels reached late last month, shortly before the conflict erupted.</p> <p>Market strategy consultant <strong>Greg Boland</strong> from trading platform Moomoo says selling pressure has intensified as the Iran war outlook worsens.</p> <p>He says:</p> <blockquote class=\"quoted\"> <p><em>The combination of rising volatility, persistent inflation concerns, and ongoing geopolitical uncertainty is keeping investors on the defensive, with markets increasingly pricing a higher-for-longer interest rate environment.</em></p>", "text": "Australia\u2019s share market has opened sharply lower this morning as fears of a prolonged Middle East conflict ignite oil prices and trigger a bout of global inflation. The Australian benchmark S&P/ASX 2"}, {"pub": "2026-03-29T23:52:58Z", "title": "Iran war to last into June at least, analyst predicts", "html": "<p><strong>The Commonwealth Bank of Australia\u2019s top geopolitical strategist has warned that the Middle East conflict is likely to last \u201cat least into June\u201d</strong>, saying <strong>Donald Trump</strong> will not be able to unilaterally extract himself from his war on Iran.</p> <p><strong>Madison Cartright</strong> said we shouldn\u2019t hope for a repeat of the Taco trade (or \u201cTrump Always Chickens Out\u201d) that had been a feature of his coercive trade policies.</p> <blockquote class=\"quoted\"> <p><em>Tariff policy was the prerogative of the president. But he cannot unilaterally decide when to end the war with Iran.</em></p> </blockquote> <p>As Australia\u2019s national cabinet sits down to develop a united strategy to deal with the fuel crisis, Cartwright laid out why federal and state leaders should be planning for a longer conflict that stretches the country\u2019s limited fuel reserves.</p>    <blockquote class=\"quoted\"> <p>Any lasting agreement to end the war must include Israel and Iran.</p>", "text": "The Commonwealth Bank of Australia\u2019s top geopolitical strategist has warned that the Middle East conflict is likely to last \u201cat least into June\u201d, saying Donald Trump will not be able to unilaterally e"}, {"pub": "2026-03-30T00:12:32Z", "title": "Tump says ceasefire could be reached quickly - report", "html": "<p><strong>Donald Trump has said a ceasefire deal in the Middle East war could be made fairly quickly, the Financial Times is reporting</strong>.</p> <p>He also said indirect talks between the US and Iran via Pakistani \u201cemissaries\u201d were progressing well, news wires quoted the FT as reporting.</p> <p>The US president said the number of Pakistan-flagged oil tankers that Iran had allowed to pass through the strait of Hormuz had now doubled to 20, the FT said. </p> <p>Trump said Iran\u2019s parliamentary speaker had authorised the additional tankers.</p>", "text": "Donald Trump has said a ceasefire deal in the Middle East war could be made fairly quickly, the Financial Times is reporting. He also said indirect talks between the US and Iran via Pakistani \u201cemissar"}, {"pub": "2026-03-30T00:16:14Z", "title": "", "html": "<p><strong>Donald Trump has also said he wants to \u201ctake the oil in Iran\u201d and could seize the export hub of Kharg Island</strong>, the Financial Times is being cited as reporting. </p>", "text": "Donald Trump has also said he wants to \u201ctake the oil in Iran\u201d and could seize the export hub of Kharg Island, the Financial Times is being cited as reporting."}, {"pub": "2026-03-30T00:44:46Z", "title": "Trump says he wants to 'take the oil' in Iran and could seize Kharg Island 'easily' \u2013 report", "html": "<p>More here on Donald Trump\u2019s comments: <strong>he says he wants to \u201ctake the oil\u201d in Iran and could seize the export hub of Kharg Island</strong>, the Financial Times is reporting, as the US sends thousands of troops to the Middle East.</p> <p>The newspaper quotes him as saying his \u201cpreference would be to take the oil\u201d, comparing the potential move to Venezuela, where the US intends to control the oil industry \u201cindefinitely\u201d following its ousting of president <strong>Nicol\u00e1s Maduro</strong> in January.</p> <p>Trump said in the interview with the FT on Sunday:</p> <blockquote class=\"quoted\"> <p>To be honest with you, my favourite thing is to take the oil in Iran, but some stupid people back in the US say: \u2018why are you doing that?\u2019 But they\u2019re stupid people.\u201d</p>", "text": "More here on Donald Trump\u2019s comments: he says he wants to \u201ctake the oil\u201d in Iran and could seize the export hub of Kharg Island, the Financial Times is reporting, as the US sends thousands of troops t"}, {"pub": "2026-03-30T01:28:10Z", "title": "", "html": "<p><strong>A generational divide over the Iran war has emerged between older conservatives in the US and their political heirs</strong>.</p> <p>At a conservative conference in Texas, younger attendees spoke of disappointment and even \u201cbetrayal\u201d over <strong>Donald Trump</strong>\u2019s launch of strikes against Iran, saying the president\u2019s actions ran counter to his many pledges to oppose foreign entanglements.</p> <p>Older conservatives, meanwhile, were looking past Trump\u2019s campaign criticism of military action to topple foreign regimes, arguing the war in Iran was a pragmatic act forced by threats to the US.</p> <p>The conference also heard pleas for unity from leaders in a challenging midterm election year for Republicans.</p> <p>There\u2019s more on that and other key Trump administration news in this rundown here:</p>", "text": "A generational divide over the Iran war has emerged between older conservatives in the US and their political heirs. At a conservative conference in Texas, younger attendees spoke of disappointment an"}, {"pub": "2026-03-30T01:43:47Z", "title": "", "html": "<p><strong>Donald Trump has said the US-Israel war has achieved regime change in Iran</strong>, while also saying he will reach a deal with Tehran.</p> <p>\u201cI think we\u2019ll make a deal with them, pretty sure ... but we\u2019ve had regime change,\u201d Trump told reporters aboard Air Force One on Sunday, citing the number of Iranian leaders killed during the war.</p> <p>\u201cWe\u2019re dealing with different people than anybody\u2019s dealt with before,\u201d the US president said, cited by AFP. \u201cIt\u2019s a whole different group of people. So I would consider that regime change.\u201d</p> <p>The US president has sent this message before \u2013 White House press secretary <strong>Karoline Leavit</strong> said last week when asked about Trump\u2019s repeated comments that Iranian regime change had been achieved: \u201cHas it not?\u201d she said. </p> <p>\u201cTheir entire leadership has been killed, and nobody has really seen or legitimately heard from this alleged new leader, so wouldn\u2019t you say there\u2019s been a change in the regime?\u201d</p>", "text": "Donald Trump has said the US-Israel war has achieved regime change in Iran, while also saying he will reach a deal with Tehran. \u201cI think we\u2019ll make a deal with them, pretty sure ... but we\u2019ve had regi"}, {"pub": "2026-03-30T02:01:22Z", "title": "Australia halves fuel excise for three months", "html": "<p><strong>The Australian government has announced it will halve the fuel excise to A26 cents a litre for three months amid the growing international energy crisis</strong>.</p> <p>The move is a turnaround for the Labor government \u2013 just five days ago, treasurer <strong>Jim Chalmers</strong> said cutting the fuel excise was not a measure it was considering.</p> <p>But prime minister <strong>Anthony Albanese</strong> said on Monday that the government understood people were under serious pressure as prices rise \u2013 and also encouraged households to take public transport instead.</p> <p>Albanese said:</p> <blockquote class=\"quoted\"> <p>Halving the fuel excise will reduce the cost of fuel by 26.3 cents [US18c] per litre \u2026 The less fuel we use in the cities, obviously, the more we can direct to regional areas that are under pressure.</p> </blockquote> <p>Albanese had been under pressure from the conservation opposition as well as independents, who were calling for the excise to be cut.</p>", "text": "The Australian government has announced it will halve the fuel excise to A26 cents a litre for three months amid the growing international energy crisis. The move is a turnaround for the Labor governm"}, {"pub": "2026-03-30T02:17:19Z", "title": "", "html": "<p><strong>The US embassy in Baghdad has warned that Iran and its proxies may intend to target American universities in Iraq and could also try to kidnap US citizens</strong>.</p> <p>Urging Americans to leave the country \u201cimmediately\u201d, the embassy said in a <a href=\"https://x.com/USEmbBaghdad/status/2038305854534148308\">security alert on X</a> that the university targets could include in Baghdad, the city of Sulaymaniyah and the Iraqi Kurdistan city of Dohuk as well as other \u201cuniversities perceived as connected to the United States\u201d.</p> <p>Iran\u2019s Revolutionary Guards threatened earlier on Monday to target US universities in the Middle East after saying US-Israeli strikes had deliberately targeted two Iranian universities.</p> <p>The Islamic Revolutionary Guard Corps said in a statement published by Iranian media:</p>", "text": "The US embassy in Baghdad has warned that Iran and its proxies may intend to target American universities in Iraq and could also try to kidnap US citizens. Urging Americans to leave the country \u201cimmed"}, {"pub": "2026-03-30T02:36:04Z", "title": "", "html": "<p>This live blog has now closed. Our coverage of the US-Israel war on Iran and the wider crisis in the Middle East continues <a href=\"https://www.theguardian.com/world/live/2026/mar/30/iran-war-live-updates-trump-oil-kharg-island-houthis-israel-lebanon-middle-east\">here</a>.</p> <aside class=\"element element-rich-link element--thumbnail\"> <p> <span>Related: </span><a href=\"https://www.theguardian.com/world/live/2026/mar/30/iran-war-live-updates-trump-oil-kharg-island-houthis-israel-lebanon-middle-east\"> Middle East crisis live: Trump says he wants to \u2018take the oil\u2019 in Iran and could seize Kharg Island \u2018easily\u2019</a> </p> </aside>", "text": "This live blog has now closed. Our coverage of the US-Israel war on Iran and the wider crisis in the Middle East continues here."}]};
+const ENTRIES = DATA.entries;
+
+const TITLE_FONT = "700 20px/1.2 Georgia, serif";
+const BODY_FONT = "15px/1.45 Georgia, serif";
+const TITLE_LH = Math.round(20 * 1.2);
+const BODY_LH = Math.round(15 * 1.45);
+
+let currentIndex = 0;
+let totalUpdates = 0;
+let speed = 60;
+let paused = false;
+let lastUpdateTime = 0;
+let scheduledTimeout = null;
+
+const timeline = document.getElementById('timeline');
+const toast = document.getElementById('toast');
+const toastText = document.getElementById('toastText');
+const updateCountEl = document.getElementById('updateCount');
+const latestAgoEl = document.getElementById('latestAgo');
+const lastHeightEl = document.getElementById('lastHeight');
+const progressStatEl = document.getElementById('progressStat');
+const keList = document.getElementById('keList');
+
+function formatTime(isoStr) {
+  const d = new Date(isoStr);
+  const t = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
+  const dt = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  return { t, dt };
+}
+
+// Typewriter for plain text (titles)
+function typewrite(el, text, onDone) {
+  var len = text.length;
+  var steps = Math.min(30, len);
+  var perStep = Math.ceil(len / steps);
+  var idx = 0;
+  var cursor = document.createElement('span');
+  cursor.style.cssText = 'display:inline-block;width:2px;height:1em;background:#C70000;margin-left:1px;vertical-align:text-bottom;animation:pulse 0.5s step-end infinite';
+  function tick() {
+    idx = Math.min(idx + perStep, len);
+    el.textContent = '';
+    el.appendChild(document.createTextNode(text.slice(0, idx)));
+    if (idx < len) {
+      el.appendChild(cursor);
+      setTimeout(tick, 30);
+    } else {
+      el.textContent = text;
+      if (onDone) onDone();
+    }
+  }
+  tick();
+}
+
+// Reveal body HTML paragraph by paragraph
+function revealBody(bodyEl, html, shimmer, entry) {
+  // Parse the HTML into a temp div to get paragraphs
+  var temp = document.createElement('div');
+  temp.innerHTML = html;
+  var children = Array.from(temp.children);
+  if (children.length === 0) {
+    // No <p> tags — just plain text
+    bodyEl.innerHTML = html;
+    settle(shimmer, entry);
+    return;
+  }
+
+  var i = 0;
+  function showNext() {
+    if (i >= children.length) {
+      settle(shimmer, entry);
+      return;
+    }
+    var p = children[i];
+    p.style.opacity = '0';
+    p.style.transform = 'translateY(4px)';
+    p.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+    bodyEl.appendChild(p);
+    // Trigger transition on next frame
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        p.style.opacity = '1';
+        p.style.transform = 'translateY(0)';
+      });
+    });
+    i++;
+    setTimeout(showNext, 120);
+  }
+  showNext();
+}
+
+function settle(shimmer, entry) {
+  shimmer.classList.add('fade-out');
+  setTimeout(function() { shimmer.remove(); entry.classList.add('settled'); }, 300);
+}
+
+function addUpdate(entry, instant) {
+  const hasTitle = !!entry.title;
+  const time = formatTime(entry.pub);
+
+  // Pre-measure with Pretext
+  const containerWidth = Math.min(700, window.innerWidth) - 40 - (hasTitle ? 16 : 0);
+  let titleH = 0;
+  if (hasTitle) {
+    const tp = prepareWithSegments(entry.title, TITLE_FONT);
+    titleH = layout(tp, containerWidth).lineCount * TITLE_LH;
+  }
+  const plainText = entry.text || entry.html.replace(/<[^>]+>/g, '').slice(0, 200);
+  const bp = prepareWithSegments(plainText, BODY_FONT);
+  const bodyLines = layout(bp, containerWidth).lineCount;
+  // Estimate: HTML paragraphs add spacing, so multiply by ~1.3
+  const bodyH = Math.round(bodyLines * BODY_LH * 1.3);
+  const totalHeight = 28 + (hasTitle ? titleH + 6 : 0) + bodyH + 28;
+
+  totalUpdates++;
+  lastUpdateTime = Date.now();
+  updateCountEl.textContent = totalUpdates;
+  lastHeightEl.textContent = totalHeight + 'px';
+  progressStatEl.textContent = currentIndex + '/' + ENTRIES.length;
+
+  const scrollBefore = window.scrollY;
+  const wasScrolled = scrollBefore > 300;
+
+  // Toast — only if the top of the timeline (where new entries appear) isn't in view
+  var timelineTop = timeline.getBoundingClientRect().top;
+  var newEntryVisible = timelineTop > -50 && timelineTop < window.innerHeight;
+  if (!instant && !newEntryVisible) {
+    var toastFullText = hasTitle ? entry.title : plainText.slice(0, 80) + '...';
+    toastText.textContent = '';
+    toast.classList.add('visible');
+    clearTimeout(toast._ht);
+    clearTimeout(toast._typeTimer);
+    // Typewriter the toast text
+    var ti = 0;
+    var tPerStep = Math.ceil(toastFullText.length / 20);
+    function toastTick() {
+      ti = Math.min(ti + tPerStep, toastFullText.length);
+      toastText.textContent = toastFullText.slice(0, ti);
+      if (ti < toastFullText.length) {
+        toast._typeTimer = setTimeout(toastTick, 25);
+      }
+    }
+    toastTick();
+    toast._ht = setTimeout(function() { toast.classList.remove('visible'); }, 6000);
+  }
+
+  // Build DOM
+  const el = document.createElement('div');
+  el.className = 'entry' + (hasTitle ? ' key-event' : '');
+  el.style.maxHeight = '0px';
+  el.style.opacity = '0';
+
+  let inner = '<div class="shimmer"></div>';
+  inner += '<div class="entry-timestamp"><span>' + time.t + '</span><span class="date-part">' + time.dt + ' UTC</span></div>';
+  if (hasTitle) inner += '<div class="entry-title"></div>';
+  inner += '<div class="entry-body"></div>';
+  inner += '<div class="height-tag">' + totalHeight + 'px</div>';
+  el.innerHTML = '<div class="entry-inner">' + inner + '</div>';
+
+  const shimmer = el.querySelector('.shimmer');
+  const titleEl = el.querySelector('.entry-title');
+  const bodyEl = el.querySelector('.entry-body');
+  timeline.prepend(el);
+
+  // Add to key events list if titled
+  if (hasTitle) {
+    const keItem = document.createElement('div');
+    keItem.className = 'ke-item';
+    keItem.innerHTML = '<span class="ke-time">' + time.t + '</span><span class="ke-title">' + entry.title + '</span>';
+    keItem.addEventListener('click', function() { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    keList.prepend(keItem);
+    document.getElementById('keCount').textContent = '(' + keList.children.length + ')';
+  }
+
+  if (instant) {
+    el.style.maxHeight = 'none';
+    el.style.opacity = '1';
+    el.classList.add('settled');
+    shimmer.remove();
+    if (titleEl) titleEl.textContent = entry.title;
+    bodyEl.innerHTML = entry.html;
+    return;
+  }
+
+  // Phase 1: Slot opens to pre-measured height
+  requestAnimationFrame(function() {
+    el.style.maxHeight = totalHeight + 'px';
+    el.style.opacity = '1';
+  });
+
+  // Scroll compensation
+  if (wasScrolled) {
+    requestAnimationFrame(function() { window.scrollBy(0, totalHeight); });
+  }
+
+  // Phase 2: Typewriter title, then reveal body
+  setTimeout(function() {
+    if (hasTitle) {
+      typewrite(titleEl, entry.title, function() {
+        revealBody(bodyEl, entry.html, shimmer, el);
+      });
+    } else {
+      revealBody(bodyEl, entry.html, shimmer, el);
+    }
+  }, 400);
+}
+
+// Scheduling
+function scheduleNext() {
+  if (currentIndex >= ENTRIES.length) { progressStatEl.textContent = 'Complete!'; return; }
+  if (paused) return;
+  if (currentIndex === 0) { addUpdate(ENTRIES[currentIndex], false); currentIndex++; scheduleNext(); return; }
+  var prev = new Date(ENTRIES[currentIndex - 1].pub).getTime();
+  var next = new Date(ENTRIES[currentIndex].pub).getTime();
+  var gap = Math.max(next - prev, 1000);
+  var scaled = Math.max(gap / speed, 300);
+  scheduledTimeout = setTimeout(function() {
+    if (paused) return;
+    addUpdate(ENTRIES[currentIndex], false);
+    currentIndex++;
+    scheduleNext();
+  }, scaled);
+}
+
+// Controls
+document.querySelectorAll('[data-speed]').forEach(function(b) {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('[data-speed]').forEach(function(x) { x.classList.remove('active'); });
+    b.classList.add('active');
+    speed = parseInt(b.dataset.speed);
+    if (scheduledTimeout) { clearTimeout(scheduledTimeout); scheduleNext(); }
+  });
+});
+document.getElementById('skipBtn').addEventListener('click', function() {
+  if (currentIndex < ENTRIES.length) {
+    if (scheduledTimeout) clearTimeout(scheduledTimeout);
+    addUpdate(ENTRIES[currentIndex], false);
+    currentIndex++;
+    scheduleNext();
+  }
+});
+document.getElementById('pauseBtn').addEventListener('click', function() {
+  paused = !paused;
+  this.textContent = paused ? 'Resume' : 'Pause';
+  this.classList.toggle('active', paused);
+  if (!paused) scheduleNext();
+});
+document.getElementById('metricsBtn').addEventListener('click', function() {
+  this.classList.toggle('active');
+  document.body.classList.toggle('show-metrics');
+});
+document.getElementById('infoBtn').addEventListener('click', function() {
+  this.classList.toggle('active');
+  document.getElementById('infoPanel').classList.toggle('open');
+});
+document.getElementById('keToggle').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('keList').classList.toggle('open');
+});
+document.getElementById('toast').addEventListener('click', function() {
+  this.classList.remove('visible');
+  var latest = document.querySelector('.entry');
+  if (latest) latest.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// Latest ticker
+setInterval(function() {
+  if (!lastUpdateTime) return;
+  var s = Math.round((Date.now() - lastUpdateTime) / 1000);
+  latestAgoEl.textContent = s < 60 ? s + 's' : Math.floor(s / 60) + 'm';
+}, 1000);
+
+// Init
+document.fonts.ready.then(function() {
+  for (var i = 0; i < 3 && i < ENTRIES.length; i++) { addUpdate(ENTRIES[i], true); currentIndex++; }
+  lastUpdateTime = Date.now();
+  scheduleNext();
+});
+</script>
+</body>
+</html>
