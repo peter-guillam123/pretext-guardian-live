@@ -243,37 +243,69 @@
     line-height: 1;
   }
 
-  /* ── MILESTONE CARD ── */
-  .milestone-card {
+  /* ── MILESTONE TIMELINE ── */
+  .milestone-timeline {
     position: absolute;
-    left: -300px;
-    top: calc(50% + 50px);
+    left: 90px;
+    top: 0;
+    bottom: 0;
     width: 280px;
-    background: #fff;
-    border-left: 3px solid #E2B829;
-    padding: 14px 18px;
-    border-radius: 0 4px 4px 0;
     z-index: 15;
     pointer-events: none;
+    overflow: hidden;
+  }
+  .milestone-entry {
+    position: absolute;
+    left: 0;
+    width: 280px;
+    padding: 10px 14px;
+    border-left: 3px solid transparent;
+    border-radius: 0 4px 4px 0;
+    transition: opacity 0.4s, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s, background 0.3s;
     opacity: 0;
-    transition: left 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    transform: translateY(0);
+  }
+  .milestone-entry.prev-ghost {
+    opacity: 0.2;
+    border-left-color: transparent;
+  }
+  .milestone-entry.active {
+    opacity: 1;
+    border-left-color: #E2B829;
+    background: rgba(255,255,255,0.95);
     box-shadow: 0 2px 16px rgba(0,0,0,0.08);
   }
-  .milestone-card.visible {
-    left: 20px;
-    opacity: 1;
-  }
-  body.dark-mode .milestone-card {
-    background: #1a1a1a;
+  body.dark-mode .milestone-entry.active {
+    background: rgba(26,26,26,0.95);
     box-shadow: 0 2px 20px rgba(0,0,0,0.4);
   }
-  .milestone-card p {
+  .milestone-entry.next-ghost {
+    opacity: 0.2;
+    border-left-color: transparent;
+  }
+  .milestone-year {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #121212;
+    margin-bottom: 2px;
+  }
+  body.dark-mode .milestone-year { color: #F6F6F6; }
+  .milestone-entry.prev-ghost .milestone-year,
+  .milestone-entry.next-ghost .milestone-year { color: #aaa; }
+  body.dark-mode .milestone-entry.prev-ghost .milestone-year,
+  body.dark-mode .milestone-entry.next-ghost .milestone-year { color: #555; }
+  .milestone-note {
     font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.4;
     color: #333;
   }
-  body.dark-mode .milestone-card p { color: #ccc; }
+  body.dark-mode .milestone-note { color: #ccc; }
+  .milestone-entry.prev-ghost .milestone-note,
+  .milestone-entry.next-ghost .milestone-note { color: #bbb; }
+  body.dark-mode .milestone-entry.prev-ghost .milestone-note,
+  body.dark-mode .milestone-entry.next-ghost .milestone-note { color: #444; }
 
   /* ── FOOTER ── */
   .article-footer {
@@ -333,9 +365,7 @@
       <div class="revenue-value" id="revenueValue">$16m</div>
     </div>
 
-    <div class="milestone-card" id="milestoneCard">
-      <p id="milestoneText"></p>
-    </div>
+    <div class="milestone-timeline" id="milestoneTimeline"></div>
   </div>
 </div>
 
@@ -417,9 +447,25 @@ const mainCircle = document.getElementById('mainCircle');
 const prevCircle = document.getElementById('prevCircle');
 const revenueValue = document.getElementById('revenueValue');
 const revenueDisplay = document.getElementById('revenueDisplay');
-const milestoneCard = document.getElementById('milestoneCard');
-const milestoneText = document.getElementById('milestoneText');
+const milestoneTimeline = document.getElementById('milestoneTimeline');
 const timelineDot = document.getElementById('timelineDot');
+
+// Build milestone entries from DATA (only those with notes)
+const MILESTONES = DATA.filter(d => d.note).map(d => ({
+  year: d.year,
+  note: d.note,
+  dataIndex: DATA.indexOf(d),
+}));
+
+// Create DOM elements for milestone timeline
+const milestoneEls = [];
+for (const m of MILESTONES) {
+  const el = document.createElement('div');
+  el.className = 'milestone-entry';
+  el.innerHTML = `<div class="milestone-year">${m.year}</div><div class="milestone-note">${m.note}</div>`;
+  milestoneTimeline.appendChild(el);
+  milestoneEls.push({ el, year: m.year, dataIndex: m.dataIndex });
+}
 const counterEl = document.getElementById('counterNumber');
 const vizFrame = document.getElementById('vizFrame');
 const productCanvas = document.getElementById('productCanvas');
@@ -494,7 +540,6 @@ function updateParticles() {
 
 // ── PRODUCT TEXT CANVAS ──
 let productPrepCache = new Map();
-let lastProductKey = '';
 
 function initProductCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -520,18 +565,15 @@ function drawProductText(cx, cy, radius, year) {
 
   // Get product text for era
   const productText = getProductsForYear(year);
-  const cacheKey = `${Math.round(year)}-${Math.round(radius)}-${fontSize}`;
+  const cacheKey = `${Math.round(year)}-${fontSize}`;
 
-  if (cacheKey === lastProductKey) return; // no change
-  lastProductKey = cacheKey;
-
-  // Prepare with Pretext
+  // Cache the expensive prepare() call, but always redraw
   let prep = productPrepCache.get(cacheKey);
   if (!prep) {
     prep = prepareWithSegments(productText, font);
     productPrepCache.set(cacheKey, prep);
     // Keep cache bounded
-    if (productPrepCache.size > 20) {
+    if (productPrepCache.size > 30) {
       const firstKey = productPrepCache.keys().next().value;
       productPrepCache.delete(firstKey);
     }
@@ -652,13 +694,35 @@ function update() {
   const cy = vizFrame.clientHeight * 0.5;
   drawProductText(cx, cy, r, currentYear);
 
-  // ── Milestone card (slide in) ──
-  const activeData = DATA[yearIdx];
-  if (activeData.note && frac < 0.7) {
-    milestoneText.textContent = activeData.note;
-    milestoneCard.classList.add('visible');
-  } else {
-    milestoneCard.classList.remove('visible');
+  // ── Milestone timeline (prev / active / next as positioned ghosts) ──
+  const roundedYear = Math.round(currentYear);
+  let closestMilestoneIdx = 0;
+  let closestDist = Infinity;
+  for (let i = 0; i < MILESTONES.length; i++) {
+    const dist = Math.abs(MILESTONES[i].year - roundedYear);
+    if (dist < closestDist) { closestDist = dist; closestMilestoneIdx = i; }
+  }
+
+  const frameH = vizFrame.clientHeight;
+  const centerY = frameH * 0.5;
+
+  for (let i = 0; i < milestoneEls.length; i++) {
+    const el = milestoneEls[i].el;
+    const offset = i - closestMilestoneIdx;
+
+    if (offset === 0 && closestDist <= 2) {
+      el.className = 'milestone-entry active';
+      el.style.top = (centerY - 30) + 'px';
+    } else if (offset === -1 && closestDist <= 3) {
+      el.className = 'milestone-entry prev-ghost';
+      el.style.top = (centerY - 140) + 'px';
+    } else if (offset === 1 && closestDist <= 3) {
+      el.className = 'milestone-entry next-ghost';
+      el.style.top = (centerY + 80) + 'px';
+    } else {
+      el.className = 'milestone-entry';
+      el.style.top = '-9999px'; // hide off-screen
+    }
   }
 
   // ── Particles + counter ──
@@ -675,7 +739,6 @@ function handleResize() {
   initCounterCanvas();
   initProductCanvas();
   scrollSpacer.style.height = (DATA.length * SCROLL_PX_PER_YEAR + window.innerHeight) + 'px';
-  lastProductKey = ''; // force redraw
 }
 window.addEventListener('resize', handleResize);
 
