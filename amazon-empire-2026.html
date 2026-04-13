@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The age of Amazon: from bookseller to everything store</title>
+<style>
+  @font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-headline/noalts-not-hinted/GHGuardianHeadline-Bold.woff2") format("woff2");
+    font-weight: 700; font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-headline/noalts-not-hinted/GHGuardianHeadline-Medium.woff2") format("woff2");
+    font-weight: 500; font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Sans Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textsans/noalts-not-hinted/GuardianTextSans-Regular.woff2") format("woff2");
+    font-weight: 400; font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Sans Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textsans/noalts-not-hinted/GuardianTextSans-Bold.woff2") format("woff2");
+    font-weight: 700; font-display: swap;
+  }
+  @font-face {
+    font-family: "Guardian Text Egyptian Web";
+    src: url("https://assets.guim.co.uk/static/frontend/fonts/guardian-textegyptian/noalts-not-hinted/GuardianTextEgyptian-Regular.woff2") format("woff2");
+    font-weight: 400; font-display: swap;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    color: #121212;
+    line-height: 1.4;
+    overflow-x: hidden;
+    transition: background-color 0.8s ease, color 0.8s ease;
+  }
+  body.dark-mode {
+    background: #121212;
+    color: #F6F6F6;
+  }
+
+  .pillar-bar { height: 4px; background: #C70000; }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+  }
+  .hero-headline {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: clamp(32px, 5vw, 50px);
+    font-weight: 700;
+    line-height: 1.08;
+    margin-bottom: 16px;
+  }
+  .hero-standfirst {
+    font-family: "Guardian Text Egyptian Web", Georgia, serif;
+    font-size: 18px;
+    line-height: 1.45;
+    color: #555;
+    margin-bottom: 20px;
+    transition: color 0.8s;
+  }
+  body.dark-mode .hero-standfirst { color: #aaa; }
+  .hero-credit {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 24px;
+  }
+  .hero-credit a { color: #C70000; text-decoration: none; }
+
+  /* ── PARTICLE COUNTER ── */
+  .counter-section {
+    position: relative;
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+  .counter-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 8px;
+  }
+  .counter-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+  }
+  .counter-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0;
+    pointer-events: none;
+  }
+  .counter-number {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #E2B829;
+    line-height: 1;
+    min-width: 240px;
+  }
+  .counter-label {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    color: #666;
+    line-height: 1.35;
+    margin-left: 16px;
+    transition: color 0.8s;
+  }
+  body.dark-mode .counter-label { color: #999; }
+
+  .scroll-hint {
+    text-align: center;
+    font-family: "Guardian Text Sans Web", sans-serif;
+    font-size: 13px;
+    color: #bbb;
+    padding-bottom: 30px;
+    transition: color 0.8s;
+  }
+  body.dark-mode .scroll-hint { color: #555; }
+
+  /* ── SCROLL VIZ ── */
+  .scroll-spacer { position: relative; }
+  .viz-frame {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    transition: background-color 0.8s;
+  }
+  body.dark-mode .viz-frame { background: #121212; }
+
+  /* ── YEAR WATERMARK ── */
+  .year-watermark {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: clamp(80px, 12vw, 140px);
+    font-weight: 700;
+    color: rgba(0,0,0,0.06);
+    pointer-events: none;
+    z-index: 1;
+    transition: color 0.8s;
+    line-height: 1;
+  }
+  body.dark-mode .year-watermark { color: rgba(255,255,255,0.06); }
+
+  /* ── TIMELINE ── */
+  .timeline-line {
+    position: absolute;
+    left: 60px;
+    top: 8%;
+    bottom: 8%;
+    width: 1px;
+    background: #DCDCDC;
+    z-index: 2;
+    transition: background 0.8s;
+  }
+  body.dark-mode .timeline-line { background: #333; }
+  .timeline-dot {
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    width: 10px; height: 10px;
+    margin-left: -5px; margin-top: -5px;
+    border-radius: 50%;
+    background: #E2B829;
+    z-index: 3;
+    box-shadow: 0 0 0 3px rgba(226,184,41,0.25);
+  }
+
+  /* ── CIRCLE (SVG) ── */
+  .circle-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .prev-circle {
+    fill: none;
+    stroke: #121212;
+    stroke-width: 1;
+    stroke-dasharray: 4 6;
+    opacity: 0.2;
+    transition: stroke 0.8s;
+  }
+  body.dark-mode .prev-circle { stroke: #fff; opacity: 0.15; }
+  .main-circle {
+    fill: #E2B829;
+    stroke: #121212;
+    stroke-width: 1.5;
+    transition: stroke 0.8s;
+  }
+  body.dark-mode .main-circle { stroke: rgba(255,255,255,0.3); }
+
+  /* ── PRODUCT TEXT CANVAS (overlaid on circle) ── */
+  .product-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  /* ── REVENUE DISPLAY ── */
+  .revenue-display {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 12;
+  }
+  .revenue-label {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #121212;
+    opacity: 0.7;
+  }
+  .revenue-value {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-weight: 700;
+    color: #121212;
+    line-height: 1;
+  }
+
+  /* ── MILESTONE CARD ── */
+  .milestone-card {
+    position: absolute;
+    left: -300px;
+    top: calc(50% + 50px);
+    width: 280px;
+    background: #fff;
+    border-left: 3px solid #E2B829;
+    padding: 14px 18px;
+    border-radius: 0 4px 4px 0;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0;
+    transition: left 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  .milestone-card.visible {
+    left: 20px;
+    opacity: 1;
+  }
+  body.dark-mode .milestone-card {
+    background: #1a1a1a;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  }
+  .milestone-card p {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+  }
+  body.dark-mode .milestone-card p { color: #ccc; }
+
+  /* ── FOOTER ── */
+  .article-footer {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    border-top: 1px solid #DCDCDC;
+    transition: border-color 0.8s;
+  }
+  body.dark-mode .article-footer { border-color: #333; }
+  .footer-text {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: #999;
+    line-height: 1.6;
+  }
+  .footer-text a { color: #C70000; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="pillar-bar"></div>
+
+<section class="hero">
+  <h1 class="hero-headline">The age of Amazon: from bookseller to everything store</h1>
+  <p class="hero-standfirst">In 1996, Amazon shipped books from a garage and made $16 million. Three decades later it ships 4,300 items every second and is worth $2.5 trillion. Scroll to watch it grow.</p>
+  <p class="hero-credit">Originally by <a href="#">Josh Holder</a> and <a href="#">Alex Hern</a> for the Guardian, 2018 &middot; Rebuilt with Pretext, 2026</p>
+</section>
+
+<section class="counter-section">
+  <div class="counter-canvas-wrap">
+    <canvas id="counterCanvas"></canvas>
+    <div class="counter-overlay">
+      <div class="counter-number" id="counterNumber">0</div>
+      <div class="counter-label">items shipped since<br>you opened this page</div>
+    </div>
+  </div>
+</section>
+
+<div class="scroll-hint">Scroll to explore &darr;</div>
+
+<div class="scroll-spacer" id="scrollSpacer">
+  <div class="viz-frame" id="vizFrame">
+    <div class="timeline-line"></div>
+    <div class="timeline-dot" id="timelineDot"></div>
+    <div class="year-watermark" id="yearWatermark">1996</div>
+
+    <svg class="circle-svg" id="circleSvg">
+      <circle class="prev-circle" id="prevCircle" cx="55%" cy="50%" r="0"/>
+      <circle class="main-circle" id="mainCircle" cx="55%" cy="50%" r="0"/>
+    </svg>
+
+    <canvas class="product-canvas" id="productCanvas"></canvas>
+
+    <div class="revenue-display" id="revenueDisplay">
+      <div class="revenue-label">Annual revenue</div>
+      <div class="revenue-value" id="revenueValue">$16m</div>
+    </div>
+
+    <div class="milestone-card" id="milestoneCard">
+      <p id="milestoneText"></p>
+    </div>
+  </div>
+</div>
+
+<footer class="article-footer">
+  <p class="footer-text">Revenue data from Amazon annual reports and SEC filings. Shipping rate based on 2024-2025 peak figures. Product names are representative of Amazon's expanding catalogue. Interactive built with <a href="https://github.com/chenglou/pretext">Pretext</a> by Cheng Lou. <a href="https://www.theguardian.com/technology/2018/apr/24/bezoss-empire-how-amazon-became-the-worlds-most-valuable-retailer">View original 2018 article</a>.</p>
+</footer>
+
+<script type="module">
+import { prepareWithSegments, layoutNextLine, prepare, layout } from 'https://esm.sh/@chenglou/pretext@0.0.3';
+
+// ── DATA ──
+const DATA = [
+  { year: 1996, revenue: 0.0157, note: "Amazon generated almost $16m in revenue just two years after being founded" },
+  { year: 1997, revenue: 0.148, note: "Amazon goes public at $18 per share, raising $54m" },
+  { year: 1998, revenue: 0.610, note: "" },
+  { year: 1999, revenue: 1.6, note: "Bezos named Time Person of the Year as dot-com mania peaks" },
+  { year: 2000, revenue: 2.8, note: "" },
+  { year: 2001, revenue: 3.1, note: "" },
+  { year: 2002, revenue: 3.9, note: "Amazon posts its first full-year profit: $5m on $3.9bn in revenue" },
+  { year: 2003, revenue: 5.3, note: "" },
+  { year: 2004, revenue: 6.9, note: "" },
+  { year: 2005, revenue: 8.5, note: "Amazon Prime launches with unlimited two-day shipping for $79 a year" },
+  { year: 2006, revenue: 10.7, note: "Amazon Web Services launches, selling cloud computing to businesses" },
+  { year: 2007, revenue: 14.8, note: "The Kindle launches, transforming the book industry" },
+  { year: 2008, revenue: 19.2, note: "" },
+  { year: 2009, revenue: 24.5, note: "" },
+  { year: 2010, revenue: 34.2, note: "Amazon Studios created to produce original film and TV content" },
+  { year: 2011, revenue: 48.1, note: "" },
+  { year: 2012, revenue: 61.1, note: "" },
+  { year: 2013, revenue: 74.5, note: "Bezos buys the Washington Post for $250m" },
+  { year: 2014, revenue: 89.0, note: "Amazon Echo and Alexa launch, creating the smart speaker market" },
+  { year: 2015, revenue: 107.0, note: "Amazon overtakes Walmart as the world's most valuable retailer" },
+  { year: 2016, revenue: 136.0, note: "" },
+  { year: 2017, revenue: 178.0, note: "Acquired supermarket chain Whole Foods for $13.7bn" },
+  { year: 2018, revenue: 233.0, note: "Becomes the second company ever to reach a $1tn market cap" },
+  { year: 2019, revenue: 281.0, note: "" },
+  { year: 2020, revenue: 386.0, note: "Covid pandemic drives 38% revenue surge; 500,000 employees added in a single year" },
+  { year: 2021, revenue: 469.8, note: "Andy Jassy replaces Bezos as CEO; workforce peaks at 1.6 million" },
+  { year: 2022, revenue: 514.0, note: "Acquires MGM for $8.5bn; announces first major round of layoffs" },
+  { year: 2023, revenue: 574.8, note: "Launches Amazon Bedrock, entering the generative AI race" },
+  { year: 2024, revenue: 638.0, note: "AWS crosses $100bn annual revenue; 9bn+ items delivered same or next day" },
+  { year: 2025, revenue: 700.0, note: "Market cap surpasses $2.5tn; ships 4,300 items per second at peak" },
+];
+
+// Products by era — text that fills the circle
+const PRODUCTS_BY_ERA = {
+  1996: "Books Books Books Books Books Books",
+  1999: "Books Music DVDs Toys Video Games Software Books Music DVDs Toys",
+  2002: "Books Music DVDs Electronics Tools Kitchen Home Garden Clothing Jewellery",
+  2005: "Books Music DVDs Electronics Tools Clothing Grocery Prime Shipping Marketplace Sellers",
+  2007: "Books Kindle Electronics Clothing Shoes Grocery Prime Fresh IMDb Marketplace Tools Kitchen",
+  2010: "Kindle Fire Studios Prime Video Electronics Clothing Shoes Grocery Fresh Marketplace Cloud AWS S3 EC2",
+  2014: "Echo Alexa Kindle Fire TV Prime Video Music Grocery Fresh Electronics Clothing AWS Lambda S3 Marketplace Twitch",
+  2017: "Echo Alexa Kindle Fire TV Prime Video Whole Foods Grocery Fresh Electronics Clothing AWS Lambda Twitch Ring Marketplace",
+  2020: "Echo Alexa Kindle Fire TV Prime Video Whole Foods Pharmacy Grocery Fresh Electronics Clothing AWS Lambda Twitch Ring Marketplace Zoox Halo",
+  2023: "Echo Alexa Kindle Fire TV Prime Video Whole Foods Pharmacy Grocery Electronics Clothing AWS Bedrock Lambda Ring Marketplace One Medical MGM Kuiper Zoox Prime Air",
+  2025: "Echo Alexa Kindle Fire TV Prime Video Whole Foods Pharmacy Grocery Electronics Clothing AWS Bedrock Lambda S3 Ring Marketplace One Medical MGM Kuiper Zoox Prime Air Twitch Music Audible Luna Games Sidewalk",
+};
+
+function getProductsForYear(year) {
+  let best = PRODUCTS_BY_ERA[1996];
+  for (const [y, text] of Object.entries(PRODUCTS_BY_ERA)) {
+    if (year >= parseInt(y)) best = text;
+  }
+  // Repeat to fill large circles
+  return (best + ' ').repeat(40);
+}
+
+const ITEMS_PER_SECOND = 4300;
+const SCROLL_PX_PER_YEAR = 280;
+const MAX_REV = DATA[DATA.length - 1].revenue;
+const DARK_THRESHOLD_REV = 100; // revenue at which dark mode kicks in
+const startTime = Date.now();
+
+// ── DOM REFS ──
+const scrollSpacer = document.getElementById('scrollSpacer');
+const yearWatermark = document.getElementById('yearWatermark');
+const mainCircle = document.getElementById('mainCircle');
+const prevCircle = document.getElementById('prevCircle');
+const revenueValue = document.getElementById('revenueValue');
+const revenueDisplay = document.getElementById('revenueDisplay');
+const milestoneCard = document.getElementById('milestoneCard');
+const milestoneText = document.getElementById('milestoneText');
+const timelineDot = document.getElementById('timelineDot');
+const counterEl = document.getElementById('counterNumber');
+const vizFrame = document.getElementById('vizFrame');
+const productCanvas = document.getElementById('productCanvas');
+const productCtx = productCanvas.getContext('2d');
+const counterCanvas = document.getElementById('counterCanvas');
+const counterCtx = counterCanvas.getContext('2d');
+
+scrollSpacer.style.height = (DATA.length * SCROLL_PX_PER_YEAR + window.innerHeight) + 'px';
+
+// ── SPRING PHYSICS ──
+let springRadius = 0;
+let springVelocity = 0;
+const SPRING_STIFFNESS = 0.12;
+const SPRING_DAMPING = 0.75;
+
+let displayedRevenue = 0;
+
+// ── PARTICLE COUNTER ──
+const particles = [];
+const MAX_PARTICLES = 300;
+
+function initCounterCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const wrap = counterCanvas.parentElement;
+  counterCanvas.width = wrap.clientWidth * dpr;
+  counterCanvas.height = wrap.clientHeight * dpr;
+  counterCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function updateParticles() {
+  const w = counterCanvas.parentElement.clientWidth;
+  const h = counterCanvas.parentElement.clientHeight;
+  const isDark = document.body.classList.contains('dark-mode');
+
+  // Spawn new particles
+  const spawnRate = 8; // particles per frame
+  for (let i = 0; i < spawnRate && particles.length < MAX_PARTICLES; i++) {
+    particles.push({
+      x: -2,
+      y: 10 + Math.random() * (h - 20),
+      vx: 1.5 + Math.random() * 2.5,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: 1.5 + Math.random() * 2,
+      life: 0,
+    });
+  }
+
+  counterCtx.clearRect(0, 0, w, h);
+
+  // Background
+  counterCtx.fillStyle = isDark ? '#1a1a1a' : '#FAFAFA';
+  counterCtx.fillRect(0, 0, w, h);
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life += 0.01;
+
+    if (p.x > w + 5) {
+      particles.splice(i, 1);
+      continue;
+    }
+
+    const alpha = Math.min(1, p.life * 5) * (1 - Math.max(0, (p.x - w + 60) / 60));
+    counterCtx.beginPath();
+    counterCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    counterCtx.fillStyle = `rgba(226, 184, 41, ${alpha * 0.6})`;
+    counterCtx.fill();
+  }
+}
+
+// ── PRODUCT TEXT CANVAS ──
+let productPrepCache = new Map();
+let lastProductKey = '';
+
+function initProductCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = vizFrame.clientWidth;
+  const h = vizFrame.clientHeight;
+  productCanvas.width = w * dpr;
+  productCanvas.height = h * dpr;
+  productCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawProductText(cx, cy, radius, year) {
+  const w = vizFrame.clientWidth;
+  const h = vizFrame.clientHeight;
+
+  productCtx.clearRect(0, 0, w, h);
+
+  if (radius < 15) return; // too small for text
+
+  const isDark = document.body.classList.contains('dark-mode');
+  const fontSize = Math.max(8, Math.min(14, radius * 0.05));
+  const lineH = Math.round(fontSize * 1.3);
+  const font = `400 ${fontSize}px "Guardian Text Sans Web", "Helvetica Neue", sans-serif`;
+
+  // Get product text for era
+  const productText = getProductsForYear(year);
+  const cacheKey = `${Math.round(year)}-${Math.round(radius)}-${fontSize}`;
+
+  if (cacheKey === lastProductKey) return; // no change
+  lastProductKey = cacheKey;
+
+  // Prepare with Pretext
+  let prep = productPrepCache.get(cacheKey);
+  if (!prep) {
+    prep = prepareWithSegments(productText, font);
+    productPrepCache.set(cacheKey, prep);
+    // Keep cache bounded
+    if (productPrepCache.size > 20) {
+      const firstKey = productPrepCache.keys().next().value;
+      productPrepCache.delete(firstKey);
+    }
+  }
+
+  // Layout text line by line, computing circular chord width per line
+  productCtx.font = font;
+  productCtx.fillStyle = isDark ? 'rgba(18, 18, 18, 0.35)' : 'rgba(160, 130, 30, 0.3)';
+  productCtx.textAlign = 'center';
+
+  const topY = cy - radius + lineH;
+  const bottomY = cy + radius - lineH;
+  let pos = { segmentIndex: 0, graphemeIndex: 0 };
+  let y = topY;
+
+  while (y < bottomY) {
+    // Chord width at this y position
+    const dy = y - cy;
+    const chordHalf = Math.sqrt(Math.max(0, radius * radius - dy * dy));
+    const lineWidth = chordHalf * 2 - fontSize * 2; // padding inside circle
+
+    if (lineWidth < fontSize * 3) {
+      y += lineH;
+      continue;
+    }
+
+    const line = layoutNextLine(prep, pos, lineWidth);
+    if (!line) break;
+
+    productCtx.fillText(line.text.trim(), cx, y + fontSize);
+    pos = line.end;
+    y += lineH;
+  }
+}
+
+// ── HELPERS ──
+function getRadius(revenue) {
+  const vh = vizFrame.clientHeight;
+  const vw = vizFrame.clientWidth;
+  const maxRadius = Math.min(vw * 0.42, vh * 0.44);
+  return maxRadius * Math.sqrt(revenue / MAX_REV);
+}
+
+function formatRevenue(rev) {
+  if (rev < 0.1) return '$' + (rev * 1000).toFixed(0) + 'm';
+  if (rev < 1) return '$' + (rev * 1000).toFixed(0) + 'm';
+  if (rev < 10) return '$' + rev.toFixed(1) + 'bn';
+  if (rev < 100) return '$' + rev.toFixed(1) + 'bn';
+  return '$' + Math.round(rev) + 'bn';
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+// ── MAIN UPDATE LOOP ──
+function update() {
+  const spacerRect = scrollSpacer.getBoundingClientRect();
+  const scrollableHeight = scrollSpacer.clientHeight - window.innerHeight;
+  const rawProgress = Math.max(0, -spacerRect.top) / scrollableHeight;
+  const progress = Math.max(0, Math.min(1, rawProgress));
+
+  const totalYears = DATA.length - 1;
+  const exactYear = progress * totalYears;
+  const yearIdx = Math.min(Math.floor(exactYear), totalYears);
+  const frac = exactYear - yearIdx;
+
+  const d = DATA[yearIdx];
+  const nextD = yearIdx < totalYears ? DATA[yearIdx + 1] : d;
+  const currentRev = lerp(d.revenue, nextD.revenue, frac);
+  const currentYear = lerp(d.year, nextD.year, frac);
+
+  // ── Dark mode transition ──
+  if (currentRev >= DARK_THRESHOLD_REV) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
+
+  // ── Year watermark ──
+  yearWatermark.textContent = Math.round(currentYear);
+
+  // ── Spring physics for circle radius ──
+  const targetRadius = getRadius(currentRev);
+  const radiusDiff = targetRadius - springRadius;
+  springVelocity += radiusDiff * SPRING_STIFFNESS;
+  springVelocity *= SPRING_DAMPING;
+  springRadius += springVelocity;
+
+  const r = Math.max(0, springRadius);
+
+  mainCircle.setAttribute('r', r);
+
+  // Previous year circle
+  if (yearIdx > 0) {
+    prevCircle.setAttribute('r', getRadius(DATA[yearIdx].revenue));
+  } else {
+    prevCircle.setAttribute('r', 0);
+  }
+
+  // ── Animated revenue counter ──
+  const revDiff = currentRev - displayedRevenue;
+  displayedRevenue += revDiff * 0.15;
+  revenueValue.textContent = formatRevenue(displayedRevenue);
+
+  const revFontSize = Math.max(16, Math.min(80, r * 0.38));
+  revenueValue.style.fontSize = revFontSize + 'px';
+
+  // Position revenue text
+  if (r < 25) {
+    revenueDisplay.style.transform = `translate(-50%, -50%) translateX(${r + 20}px)`;
+    revenueDisplay.style.textAlign = 'left';
+  } else {
+    revenueDisplay.style.transform = 'translate(-50%, -50%)';
+    revenueDisplay.style.textAlign = 'center';
+  }
+
+  // ── Product text inside circle ──
+  const cx = vizFrame.clientWidth * 0.55;
+  const cy = vizFrame.clientHeight * 0.5;
+  drawProductText(cx, cy, r, currentYear);
+
+  // ── Milestone card (slide in) ──
+  const activeData = DATA[yearIdx];
+  if (activeData.note && frac < 0.7) {
+    milestoneText.textContent = activeData.note;
+    milestoneCard.classList.add('visible');
+  } else {
+    milestoneCard.classList.remove('visible');
+  }
+
+  // ── Particles + counter ──
+  updateParticles();
+  const elapsed = (Date.now() - startTime) / 1000;
+  const count = Math.floor(elapsed * ITEMS_PER_SECOND);
+  counterEl.textContent = count.toLocaleString('en-GB');
+
+  requestAnimationFrame(update);
+}
+
+// ── RESIZE ──
+function handleResize() {
+  initCounterCanvas();
+  initProductCanvas();
+  scrollSpacer.style.height = (DATA.length * SCROLL_PX_PER_YEAR + window.innerHeight) + 'px';
+  lastProductKey = ''; // force redraw
+}
+window.addEventListener('resize', handleResize);
+
+// ── INIT ──
+document.fonts.ready.then(() => {
+  initCounterCanvas();
+  initProductCanvas();
+  requestAnimationFrame(update);
+});
+</script>
+</body>
+</html>
