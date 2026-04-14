@@ -538,6 +538,51 @@ function updateParticles() {
   }
 }
 
+// ── DELIVERY PARTICLES (end of scroll) ──
+const deliveryParticles = [];
+const MAX_DELIVERY_PARTICLES = 400;
+
+function updateDeliveryParticles(intensity) {
+  // intensity: 0 to 1 — how far into the final stretch we are
+  const w = vizFrame.clientWidth;
+  const h = vizFrame.clientHeight;
+
+  // Spawn rate scales with intensity — at max, spawns a dense stream
+  const spawnRate = Math.floor(intensity * 12);
+  for (let i = 0; i < spawnRate && deliveryParticles.length < MAX_DELIVERY_PARTICLES; i++) {
+    deliveryParticles.push({
+      x: -5,
+      y: 20 + Math.random() * (h - 40),
+      vx: 3 + Math.random() * 4,
+      vy: (Math.random() - 0.5) * 0.5,
+      size: 1.5 + Math.random() * 2.5,
+      life: 0,
+    });
+  }
+
+  const isDark = document.body.classList.contains('dark-mode');
+  for (let i = deliveryParticles.length - 1; i >= 0; i--) {
+    const p = deliveryParticles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life += 0.008;
+
+    if (p.x > w + 10) {
+      deliveryParticles.splice(i, 1);
+      continue;
+    }
+
+    // Fade in at spawn, fade out near right edge
+    const alpha = Math.min(1, p.life * 4) * (1 - Math.max(0, (p.x - w + 80) / 80));
+    productCtx.beginPath();
+    productCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    productCtx.fillStyle = isDark
+      ? `rgba(226, 184, 41, ${alpha * 0.75})`
+      : `rgba(226, 184, 41, ${alpha * 0.55})`;
+    productCtx.fill();
+  }
+}
+
 // ── PRODUCT TEXT CANVAS ──
 let productPrepCache = new Map();
 
@@ -693,6 +738,12 @@ function update() {
   const cx = vizFrame.clientWidth * 0.55;
   const cy = vizFrame.clientHeight * 0.5;
   drawProductText(cx, cy, r, currentYear);
+
+  // ── Delivery particle stream (ramps up over the last 3 years of scroll) ──
+  const deliveryIntensity = Math.max(0, Math.min(1, (progress - 0.88) / 0.12));
+  if (deliveryIntensity > 0 || deliveryParticles.length > 0) {
+    updateDeliveryParticles(deliveryIntensity);
+  }
 
   // ── Milestone timeline (prev / active / next as positioned ghosts) ──
   const roundedYear = Math.round(currentYear);
