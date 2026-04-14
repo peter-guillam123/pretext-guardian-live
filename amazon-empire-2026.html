@@ -307,6 +307,36 @@
   body.dark-mode .milestone-entry.prev-ghost .milestone-note,
   body.dark-mode .milestone-entry.next-ghost .milestone-note { color: #444; }
 
+  /* ── END COUNTER (appears at end of scroll) ── */
+  .end-counter {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    text-align: center;
+  }
+  .end-counter.visible { opacity: 1; }
+  .end-counter-number {
+    font-family: "Guardian Egyptian Web", Georgia, serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: #E2B829;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  .end-counter-label {
+    font-family: "Guardian Text Sans Web", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-top: 6px;
+    letter-spacing: 0.3px;
+  }
+  body.dark-mode .end-counter-label { color: #888; }
+
   /* ── FOOTER ── */
   .article-footer {
     max-width: 740px;
@@ -366,6 +396,11 @@
     </div>
 
     <div class="milestone-timeline" id="milestoneTimeline"></div>
+
+    <div class="end-counter" id="endCounter">
+      <div class="end-counter-number" id="endCounterNumber">0</div>
+      <div class="end-counter-label">items shipped since you opened this page</div>
+    </div>
   </div>
 </div>
 
@@ -467,6 +502,8 @@ for (const m of MILESTONES) {
   milestoneEls.push({ el, year: m.year, dataIndex: m.dataIndex });
 }
 const counterEl = document.getElementById('counterNumber');
+const endCounter = document.getElementById('endCounter');
+const endCounterNumber = document.getElementById('endCounterNumber');
 const vizFrame = document.getElementById('vizFrame');
 const productCanvas = document.getElementById('productCanvas');
 const productCtx = productCanvas.getContext('2d');
@@ -780,7 +817,16 @@ function update() {
   updateParticles();
   const elapsed = (Date.now() - startTime) / 1000;
   const count = Math.floor(elapsed * ITEMS_PER_SECOND);
-  counterEl.textContent = count.toLocaleString('en-GB');
+  const countStr = count.toLocaleString('en-GB');
+  counterEl.textContent = countStr;
+
+  // End counter — appears with the delivery particles
+  if (deliveryIntensity > 0) {
+    endCounterNumber.textContent = countStr;
+    endCounter.classList.add('visible');
+  } else {
+    endCounter.classList.remove('visible');
+  }
 
   requestAnimationFrame(update);
 }
